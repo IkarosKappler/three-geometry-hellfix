@@ -14,12 +14,53 @@
  * @date 2022-02-11
  */
 
+ import { Box3, BufferAttribute, BufferGeometry, Color, EventDispatcher, Float32BufferAttribute, MathUtils, Matrix3, Matrix4, Object3D, Sphere, Vector2, Vector3 } from "three";
+import { DirectGeometry, MorphNormal, MorphTarget } from "./DirectGeometry";
+import { Face3 } from "./Face3";
+import { VertexNormals } from "./interfaces";
 
 const _m1 = new Matrix4();
 const _obj = new Object3D();
 const _offset = new Vector3();
 
+
+    // this.faceVertexUvs[0].push([
+    //     new THREE.Vector2(0.0, ratioJ),
+    //     new THREE.Vector2(0.0, ratioI),
+    //     new THREE.Vector2(1.0, ratioJ)
+    //   ]);
+    //   this.faceVertexUvs[0].push([
+    //     new THREE.Vector2(0.0, ratioI),
+    //     new THREE.Vector2(1.0, ratioI),
+    //     new THREE.Vector2(1.0, ratioJ)
+    //   ]);
+
 class Geometry extends EventDispatcher {
+
+    uuid: string; // TODO: is this type correct?
+    name: string;
+    type: string;
+    vertices: Array<Vector3>;
+    colors: Array<Color>;
+    faces: Array<Face3>;
+    faceVertexUvs: Array< Array< [Vector2, Vector2, Vector2 ]> >; // TODO: is  [] correct here? Can we do this better?
+    morphTargets: Array<any>; // TODO: what's this?
+    morphNormals: Array<MorphNormal>; // TODO: check type
+    skinWeights: Array<number>; // TODO: type?
+    skinIndices: Array<number>; // TODO: type?
+    lineDistances: Array<number>; // TODO: type?
+    boundingBox: Box3;
+    boundingSphere: Sphere;
+    elementsNeedUpdate:boolean;
+	verticesNeedUpdate :boolean;
+    uvsNeedUpdate :boolean;
+    normalsNeedUpdate :boolean;
+    colorsNeedUpdate :boolean;
+    lineDistancesNeedUpdate :boolean;
+	groupsNeedUpdate :boolean;
+    // It seems this can be any object
+    parameters: object;
+    isGeometry: boolean; // Will be set to true :)
 
 	constructor() {
 
@@ -207,7 +248,7 @@ class Geometry extends EventDispatcher {
 
 		}
 
-		function addFace( a, b, c, materialIndex ) {
+		function addFace( a:number, b:number, c:number, materialIndex?:number ) {
 
 			const vertexColors = ( color === undefined ) ? [] : [
 				scope.colors[ a ].clone(),
@@ -543,7 +584,7 @@ class Geometry extends EventDispatcher {
 
 			if ( ! this.morphNormals[ i ] ) {
 
-				this.morphNormals[ i ] = {};
+				this.morphNormals[ i ] = {} as MorphNormal; // TODO: is this typecast really necessary?
 				this.morphNormals[ i ].faceNormals = [];
 				this.morphNormals[ i ].vertexNormals = [];
 
@@ -732,7 +773,7 @@ class Geometry extends EventDispatcher {
 
 			for ( let j = 0, jl = faceVertexUvs2.length; j < jl; j ++ ) {
 
-				const uvs2 = faceVertexUvs2[ j ], uvsCopy = [];
+                const uvs2 = faceVertexUvs2[ j ], uvsCopy = [];
 
 				for ( let k = 0, kl = uvs2.length; k < kl; k ++ ) {
 
@@ -740,7 +781,9 @@ class Geometry extends EventDispatcher {
 
 				}
 
-				this.faceVertexUvs[ i ].push( uvsCopy );
+				// this.faceVertexUvs[ i ].push( uvsCopy );
+                // TODO: verify correctness
+                this.faceVertexUvs[ i ].push( uvsCopy as [Vector2, Vector2, Vector2] );
 
 			}
 
@@ -872,7 +915,7 @@ class Geometry extends EventDispatcher {
 
 		for ( let i = 0; i < length; i ++ ) {
 
-			faces[ i ]._id = i;
+			faces[ i ]._id = i; // TODO: can we use a proper type for _id?
 
 		}
 
@@ -917,7 +960,12 @@ class Geometry extends EventDispatcher {
 				version: 4.5,
 				type: 'Geometry',
 				generator: 'Geometry.toJSON'
-			}
+			},
+            // TODO: check this (this is new)
+            uuid: null,
+            type: null,
+            name: null,
+            data: null
 		};
 
 		// standard Geometry serialization
@@ -1198,7 +1246,7 @@ class Geometry extends EventDispatcher {
 
 				}
 
-				this.faceVertexUvs[ i ].push( uvsCopy );
+				this.faceVertexUvs[ i ].push( uvsCopy as [Vector2, Vector2, Vector2]);
 
 			}
 
@@ -1210,7 +1258,9 @@ class Geometry extends EventDispatcher {
 
 		for ( let i = 0, il = morphTargets.length; i < il; i ++ ) {
 
-			const morphTarget = {};
+			// const morphTarget = {};
+            // TODO: verify correctness
+            const morphTarget = {} as MorphTarget;
 			morphTarget.name = morphTargets[ i ].name;
 
 			// vertices
@@ -1251,7 +1301,7 @@ class Geometry extends EventDispatcher {
 
 		for ( let i = 0, il = morphNormals.length; i < il; i ++ ) {
 
-			const morphNormal = {};
+			const morphNormal = {} as MorphNormal;
 
 			// vertex normals
 
@@ -1262,7 +1312,7 @@ class Geometry extends EventDispatcher {
 				for ( let j = 0, jl = morphNormals[ i ].vertexNormals.length; j < jl; j ++ ) {
 
 					const srcVertexNormal = morphNormals[ i ].vertexNormals[ j ];
-					const destVertexNormal = {};
+					const destVertexNormal = {} as VertexNormals;
 
 					destVertexNormal.a = srcVertexNormal.a.clone();
 					destVertexNormal.b = srcVertexNormal.b.clone();

@@ -14,7 +14,9 @@
  * @date 2022-02-11
  */
 
-import * as THREE from "three";
+// TODO: only import required types
+// import * as THREE from "three";
+import { Color, Vector3 } from "three";
 
 export class Face3 {
 
@@ -27,16 +29,25 @@ export class Face3 {
     vertexColors: Array<THREE.Color>;
     materialIndex: number;
 
-	constructor( a:number, b:number, c:number, normal:THREE.Vector3, color:string | number | THREE.Color , materialIndex:number = 0 ) {
+    // THIS IS USED BY GEOMETRY ... IS THERE A BETTER WAY?
+    __originalFaceNormal: Vector3;
+    __originalVertexNormals: Array<Vector3>;
+    _id: any;
+
+	constructor( a:number, b:number, c:number, normal?:Vector3|Array<Vector3>, color?:Array<Color> | string | number | Color , materialIndex:number = 0 ) {
 
 		this.a = a;
 		this.b = b;
 		this.c = c;
 
-		this.normal = ( normal && normal.isVector3 ) ? normal : new THREE.Vector3();
+		// this.normal = ( normal && normal.isVector3 ) ? normal : new THREE.Vector3();
+		// this.vertexNormals = Array.isArray( normal ) ? normal : [];
+        // TODO: verify correctness
+        this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new Vector3();
 		this.vertexNormals = Array.isArray( normal ) ? normal : [];
 
-		this.color = ( color && color.isColor ) ? color : new THREE.Color();
+		// this.color = ( color && color.isColor ) ? color : new THREE.Color();
+        this.color = ( color && ( color instanceof Color && color.isColor)  ) ? color : new Color(); // TODO: verify correctness
 		this.vertexColors = Array.isArray( color ) ? color : [];
 
 		this.materialIndex = materialIndex;

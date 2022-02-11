@@ -15,14 +15,15 @@
  */
 
 //  import * as THREE from "three";
- import { BoundingBox, BoundingSphere, Color, Vector2, Vector3 } from "three";
+ import { Box3, Color, Sphere, Vector2, Vector3 } from "three";
+import { VertexNormals } from "./interfaces";
 
 //  group = {
 //     start: i * 3,
 //     materialIndex: materialIndex
 // };
 // group.count = ( i * 3 ) - group.start;
- interface Group {
+ export interface Group {
     start: number;
     materialIndex: number;
     count: number;
@@ -30,7 +31,7 @@
 
 //  const morphTarget = {};
 // 			morphTarget.name = morphTargets[ i ].name;
- interface MorphTarget {
+ export interface MorphTarget {
     name: string;
     vertices: Array<Vector3>; // TODO: check if this is Vector2
     normals: Array<Vector3>; // TODO: check if this is Vector2
@@ -39,8 +40,8 @@
 //  const morphNormal = {};
 //  morphNormal.vertexNormals = [];
 // morphNormal.faceNormals = [];
- interface MorphNormal {
-    vertexNormals: Array<Vector3>; // TODO: check if Vector2?
+ export interface MorphNormal {
+    vertexNormals: VertexNormals[]; // Array<Vector3>; // TODO: check if Vector2?
     faceNormals: Array<Vector3>; // TODO: is Vector2?
  }
 
@@ -55,25 +56,13 @@ export class DirectGeometry {
     morphTargets: { position: Vector3; normal : Vector3}; // Array<MorphTarget>; // TODO: Record?
     skinWeights: Array<any>; // TODO
     skinIndices: Array<any>; // TODO
-    boundingBox: BoundingBox; // correct?
-    boundingSphere: BoundingSphere; // correct?
+    boundingBox: Box3; // correct?
+    boundingSphere: Sphere; // correct?
     verticesNeedUpdate: boolean;
     normalsNeedUpdate: boolean;
     colorsNeedUpdate : boolean;
     uvsNeedUpdate: boolean;
     groupsNeedUpdate: boolean;
-
-
-    // this.faceVertexUvs[0].push([
-    //     new THREE.Vector2(0.0, ratioJ),
-    //     new THREE.Vector2(0.0, ratioI),
-    //     new THREE.Vector2(1.0, ratioJ)
-    //   ]);
-    //   this.faceVertexUvs[0].push([
-    //     new THREE.Vector2(0.0, ratioI),
-    //     new THREE.Vector2(1.0, ratioI),
-    //     new THREE.Vector2(1.0, ratioJ)
-    //   ]);
 
 	constructor() {
 
