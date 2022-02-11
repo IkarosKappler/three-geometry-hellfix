@@ -16,34 +16,8 @@
 
 //  import * as THREE from "three";
  import { Box3, Color, Sphere, Vector2, Vector3 } from "three";
-import { VertexNormals } from "./interfaces";
+import { Group } from "./interfaces";
 
-//  group = {
-//     start: i * 3,
-//     materialIndex: materialIndex
-// };
-// group.count = ( i * 3 ) - group.start;
- export interface Group {
-    start: number;
-    materialIndex: number;
-    count: number;
- }
-
-//  const morphTarget = {};
-// 			morphTarget.name = morphTargets[ i ].name;
- export interface MorphTarget {
-    name: string;
-    vertices: Array<Vector3>; // TODO: check if this is Vector2
-    normals: Array<Vector3>; // TODO: check if this is Vector2
- }
-
-//  const morphNormal = {};
-//  morphNormal.vertexNormals = [];
-// morphNormal.faceNormals = [];
- export interface MorphNormal {
-    vertexNormals: VertexNormals[]; // Array<Vector3>; // TODO: check if Vector2?
-    faceNormals: Array<Vector3>; // TODO: is Vector2?
- }
 
 export class DirectGeometry {
 

@@ -1,4 +1,5 @@
-export * from "./myclasses";
-export * from "./myfunctions";
-export * from "./myconstants";
+export * from "./DirectGeometry";
+export * from "./Face3";
+export * from "./Gmetry";
+export * from "./interfaces";
 //# sourceMappingURL=index.js.map

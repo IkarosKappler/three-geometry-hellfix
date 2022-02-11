@@ -1,8 +1,9 @@
-import { MyClass } from "./myclasses";
-import { CONST_A, CONST_B } from "./myconstants";
-export const MyLibrary = {
-    MyClass,
-    CONST_A,
-    CONST_B
+import { DirectGeometry } from "./DirectGeometry";
+import { Face3 } from "./Face3";
+import { Gmetry } from "./Gmetry";
+export const ThreeGeometryHellfix = {
+    DirectGeometry,
+    Face3,
+    Gmetry
 };
 //# sourceMappingURL=mylibrary.js.map
