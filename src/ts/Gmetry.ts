@@ -18,6 +18,7 @@
 import { DirectGeometry} from "./DirectGeometry";
 import { Face3 } from "./Face3";
 import { MorphNormal, MorphTarget, VertexNormals } from "./interfaces";
+import * as THREE from "three";
 
 const _m1 = new Matrix4();
 const _obj = new Object3D();
@@ -65,6 +66,8 @@ export class Gmetry extends EventDispatcher {
 	constructor() {
 
 		super();
+
+		new Face3( 1, 2,3 );
 
 		this.uuid = MathUtils.generateUUID();
 

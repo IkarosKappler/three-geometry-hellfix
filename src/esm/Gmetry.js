@@ -32,6 +32,7 @@ const _offset = new Vector3();
 export class Gmetry extends EventDispatcher {
     constructor() {
         super();
+        new Face3(1, 2, 3);
         this.uuid = MathUtils.generateUUID();
         this.name = '';
         this.type = 'Geometry';

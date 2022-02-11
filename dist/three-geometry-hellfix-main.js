@@ -1,4 +1,278 @@
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/cjs/DirectGeometry.js":
+/*!***********************************!*\
+  !*** ./src/cjs/DirectGeometry.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
 "use strict";
+
+/**
+ * THE ORIGINAL SOURCE COOE IS HERE:
+ *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
+ *
+ * This is a backport of the old (deprecated) THREE.DirectGeometry class.
+ *
+ * It got deprecated in version r125 and was announced to be completely dropped in future versions.
+ *
+ * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
+ *
+ * And here this is a Typescript port, too. Enjoy!
+ *    - Ikaros Kappler
+ *
+ * @date 2022-02-11
+ */
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DirectGeometry = void 0;
+//  import * as THREE from "three";
+var three_1 = __webpack_require__(/*! three */ "./node_modules/three/build/three.cjs");
+var DirectGeometry = /** @class */ (function () {
+    function DirectGeometry() {
+        this.vertices = [];
+        this.normals = [];
+        this.colors = [];
+        this.uvs = [];
+        this.uvs2 = [];
+        this.groups = [];
+        this.morphTargets = { position: null, normal: null };
+        this.skinWeights = [];
+        this.skinIndices = [];
+        // this.lineDistances = [];
+        this.boundingBox = null;
+        this.boundingSphere = null;
+        // update flags
+        this.verticesNeedUpdate = false;
+        this.normalsNeedUpdate = false;
+        this.colorsNeedUpdate = false;
+        this.uvsNeedUpdate = false;
+        this.groupsNeedUpdate = false;
+    }
+    DirectGeometry.prototype.computeGroups = function (geometry) {
+        var groups = [];
+        var group, i;
+        var materialIndex = undefined;
+        var faces = geometry.faces;
+        for (i = 0; i < faces.length; i++) {
+            var face = faces[i];
+            // materials
+            if (face.materialIndex !== materialIndex) {
+                materialIndex = face.materialIndex;
+                if (group !== undefined) {
+                    group.count = (i * 3) - group.start;
+                    groups.push(group);
+                }
+                group = {
+                    start: i * 3,
+                    materialIndex: materialIndex
+                };
+            }
+        }
+        if (group !== undefined) {
+            group.count = (i * 3) - group.start;
+            groups.push(group);
+        }
+        this.groups = groups;
+    };
+    DirectGeometry.prototype.fromGeometry = function (geometry) {
+        var faces = geometry.faces;
+        var vertices = geometry.vertices;
+        var faceVertexUvs = geometry.faceVertexUvs;
+        var hasFaceVertexUv = faceVertexUvs[0] && faceVertexUvs[0].length > 0;
+        var hasFaceVertexUv2 = faceVertexUvs[1] && faceVertexUvs[1].length > 0;
+        // morphs
+        var morphTargets = geometry.morphTargets;
+        var morphTargetsLength = morphTargets.length;
+        var morphTargetsPosition;
+        if (morphTargetsLength > 0) {
+            morphTargetsPosition = [];
+            for (var i = 0; i < morphTargetsLength; i++) {
+                morphTargetsPosition[i] = {
+                    name: morphTargets[i].name,
+                    data: []
+                };
+            }
+            this.morphTargets.position = morphTargetsPosition;
+        }
+        var morphNormals = geometry.morphNormals;
+        var morphNormalsLength = morphNormals.length;
+        var morphTargetsNormal;
+        if (morphNormalsLength > 0) {
+            morphTargetsNormal = [];
+            for (var i = 0; i < morphNormalsLength; i++) {
+                morphTargetsNormal[i] = {
+                    name: morphNormals[i].name,
+                    data: []
+                };
+            }
+            this.morphTargets.normal = morphTargetsNormal;
+        }
+        // skins
+        var skinIndices = geometry.skinIndices;
+        var skinWeights = geometry.skinWeights;
+        var hasSkinIndices = skinIndices.length === vertices.length;
+        var hasSkinWeights = skinWeights.length === vertices.length;
+        //
+        if (vertices.length > 0 && faces.length === 0) {
+            console.error('THREE.DirectGeometry: Faceless geometries are not supported.');
+        }
+        for (var i = 0; i < faces.length; i++) {
+            var face = faces[i];
+            this.vertices.push(vertices[face.a], vertices[face.b], vertices[face.c]);
+            var vertexNormals = face.vertexNormals;
+            if (vertexNormals.length === 3) {
+                this.normals.push(vertexNormals[0], vertexNormals[1], vertexNormals[2]);
+            }
+            else {
+                var normal = face.normal;
+                this.normals.push(normal, normal, normal);
+            }
+            var vertexColors = face.vertexColors;
+            if (vertexColors.length === 3) {
+                this.colors.push(vertexColors[0], vertexColors[1], vertexColors[2]);
+            }
+            else {
+                var color = face.color;
+                this.colors.push(color, color, color);
+            }
+            if (hasFaceVertexUv === true) {
+                var vertexUvs = faceVertexUvs[0][i];
+                if (vertexUvs !== undefined) {
+                    this.uvs.push(vertexUvs[0], vertexUvs[1], vertexUvs[2]);
+                }
+                else {
+                    console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i);
+                    this.uvs.push(new three_1.Vector2(), new three_1.Vector2(), new three_1.Vector2());
+                }
+            }
+            if (hasFaceVertexUv2 === true) {
+                var vertexUvs = faceVertexUvs[1][i];
+                if (vertexUvs !== undefined) {
+                    this.uvs2.push(vertexUvs[0], vertexUvs[1], vertexUvs[2]);
+                }
+                else {
+                    console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i);
+                    this.uvs2.push(new three_1.Vector2(), new three_1.Vector2(), new three_1.Vector2());
+                }
+            }
+            // morphs
+            for (var j = 0; j < morphTargetsLength; j++) {
+                var morphTarget = morphTargets[j].vertices;
+                morphTargetsPosition[j].data.push(morphTarget[face.a], morphTarget[face.b], morphTarget[face.c]);
+            }
+            for (var j = 0; j < morphNormalsLength; j++) {
+                var morphNormal = morphNormals[j].vertexNormals[i];
+                morphTargetsNormal[j].data.push(morphNormal.a, morphNormal.b, morphNormal.c);
+            }
+            // skins
+            if (hasSkinIndices) {
+                this.skinIndices.push(skinIndices[face.a], skinIndices[face.b], skinIndices[face.c]);
+            }
+            if (hasSkinWeights) {
+                this.skinWeights.push(skinWeights[face.a], skinWeights[face.b], skinWeights[face.c]);
+            }
+        }
+        this.computeGroups(geometry);
+        this.verticesNeedUpdate = geometry.verticesNeedUpdate;
+        this.normalsNeedUpdate = geometry.normalsNeedUpdate;
+        this.colorsNeedUpdate = geometry.colorsNeedUpdate;
+        this.uvsNeedUpdate = geometry.uvsNeedUpdate;
+        this.groupsNeedUpdate = geometry.groupsNeedUpdate;
+        if (geometry.boundingSphere !== null) {
+            this.boundingSphere = geometry.boundingSphere.clone();
+        }
+        if (geometry.boundingBox !== null) {
+            this.boundingBox = geometry.boundingBox.clone();
+        }
+        return this;
+    };
+    return DirectGeometry;
+}());
+exports.DirectGeometry = DirectGeometry;
+//# sourceMappingURL=DirectGeometry.js.map
+
+/***/ }),
+
+/***/ "./src/cjs/Face3.js":
+/*!**************************!*\
+  !*** ./src/cjs/Face3.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+/**
+ * THE ORIGINAL SOURCE COOE IS HERE:
+ *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
+ *
+ * This is a backport of the old (deprecated) THREE.Face3 class.
+ *
+ * It got deprecated in version r125 and was announced to be completely dropped in future versions.
+ *
+ * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
+ *
+ * And here this is a Typescript port, too. Enjoy!
+ *    - Ikaros Kappler
+ *
+ * @date 2022-02-11
+ */
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Face3 = void 0;
+// TODO: only import required types
+// import * as THREE from "three";
+var three_1 = __webpack_require__(/*! three */ "./node_modules/three/build/three.cjs");
+var Face3 = /** @class */ (function () {
+    function Face3(a, b, c, normal, color, materialIndex) {
+        if (materialIndex === void 0) { materialIndex = 0; }
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        // this.normal = ( normal && normal.isVector3 ) ? normal : new THREE.Vector3();
+        // this.vertexNormals = Array.isArray( normal ) ? normal : [];
+        // TODO: verify correctness
+        this.normal = (normal && (normal instanceof three_1.Vector3 && normal.isVector3)) ? normal : new three_1.Vector3();
+        this.vertexNormals = Array.isArray(normal) ? normal : [];
+        // this.color = ( color && color.isColor ) ? color : new THREE.Color();
+        this.color = (color && (color instanceof three_1.Color && color.isColor)) ? color : new three_1.Color(); // TODO: verify correctness
+        this.vertexColors = Array.isArray(color) ? color : [];
+        this.materialIndex = materialIndex;
+    }
+    Face3.prototype.clone = function () {
+        // TODO: check if new expression is correct
+        // return new this.constructor().copy( this );
+        return new Face3(this.a, this.b, this.c, this.normal.clone(), this.color.clone(), this.materialIndex).copy(this);
+    };
+    Face3.prototype.copy = function (source) {
+        this.a = source.a;
+        this.b = source.b;
+        this.c = source.c;
+        this.normal.copy(source.normal);
+        this.color.copy(source.color);
+        this.materialIndex = source.materialIndex;
+        for (var i = 0, il = source.vertexNormals.length; i < il; i++) {
+            this.vertexNormals[i] = source.vertexNormals[i].clone();
+        }
+        for (var i = 0, il = source.vertexColors.length; i < il; i++) {
+            this.vertexColors[i] = source.vertexColors[i].clone();
+        }
+        return this;
+    };
+    return Face3;
+}());
+exports.Face3 = Face3;
+//# sourceMappingURL=Face3.js.map
+
+/***/ }),
+
+/***/ "./src/cjs/Gmetry.js":
+/*!***************************!*\
+  !*** ./src/cjs/Gmetry.js ***!
+  \***************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
 /**
  * THE ORIGINAL SOURCE COOE IS HERE:
  *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
@@ -29,11 +303,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Gmetry = void 0;
-var three_1 = require("three");
-var DirectGeometry_1 = require("./DirectGeometry");
-var Face3_1 = require("./Face3");
+var three_1 = __webpack_require__(/*! three */ "./node_modules/three/build/three.cjs");
+var DirectGeometry_1 = __webpack_require__(/*! ./DirectGeometry */ "./src/cjs/DirectGeometry.js");
+var Face3_1 = __webpack_require__(/*! ./Face3 */ "./src/cjs/Face3.js");
 var _m1 = new three_1.Matrix4();
 var _obj = new three_1.Object3D();
 var _offset = new three_1.Vector3();
@@ -927,3 +1201,190 @@ var Gmetry = /** @class */ (function (_super) {
 exports.Gmetry = Gmetry;
 // Gmetry.prototype.isGeometry = true;
 //# sourceMappingURL=Gmetry.js.map
+
+/***/ }),
+
+/***/ "./src/cjs/entry.js":
+/*!**************************!*\
+  !*** ./src/cjs/entry.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+// Expose all your components to the global scope here.
+
+globalThis.ThreeGeometryHellfix = __webpack_require__(/*! ./ */ "./src/cjs/index.js").ThreeGeometryHellfix;
+
+
+/***/ }),
+
+/***/ "./src/cjs/index.js":
+/*!**************************!*\
+  !*** ./src/cjs/index.js ***!
+  \**************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./DirectGeometry */ "./src/cjs/DirectGeometry.js"), exports);
+__exportStar(__webpack_require__(/*! ./Face3 */ "./src/cjs/Face3.js"), exports);
+__exportStar(__webpack_require__(/*! ./Gmetry */ "./src/cjs/Gmetry.js"), exports);
+__exportStar(__webpack_require__(/*! ./interfaces */ "./src/cjs/interfaces.js"), exports);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./src/cjs/interfaces.js":
+/*!*******************************!*\
+  !*** ./src/cjs/interfaces.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+//# sourceMappingURL=interfaces.js.map
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"main": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkthree_geometry_hellfix"] = self["webpackChunkthree_geometry_hellfix"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendor"], () => (__webpack_require__("./src/cjs/entry.js")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
+/******/ })()
+;
+//# sourceMappingURL=three-geometry-hellfix-main.js.map
