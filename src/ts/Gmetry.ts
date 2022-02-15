@@ -14,11 +14,12 @@
  * @date 2022-02-11
  */
 
- import { Box3, BufferAttribute, BufferGeometry, Color, EventDispatcher, Float32BufferAttribute, MathUtils, Matrix3, Matrix4, Object3D, Sphere, Vector2, Vector3 } from "three";
+import { Box3, BufferAttribute, BufferGeometry, Color, 
+	Float32BufferAttribute, MathUtils, Matrix3, Matrix4, Object3D, Sphere, Vector2, Vector3 } from "three";
 import { DirectGeometry} from "./DirectGeometry";
 import { Face3 } from "./Face3";
 import { MorphNormal, MorphTarget, VertexNormals } from "./interfaces";
-import * as THREE from "three";
+// import * as THREE from "three";
 
 const _m1 = new Matrix4();
 const _obj = new Object3D();
@@ -36,7 +37,9 @@ const _offset = new Vector3();
     //     new THREE.Vector2(1.0, ratioJ)
     //   ]);
 
-export class Gmetry extends EventDispatcher {
+export class Gmetry { 
+	// This is not required when used outside of THREE.
+	// extends EventDispatcher {
 
     uuid: string; // TODO: is this type correct?
     name: string;
@@ -65,9 +68,10 @@ export class Gmetry extends EventDispatcher {
 
 	constructor() {
 
-		super();
+		// super();
+		// EventDispatcher.call( this );
 
-		new Face3( 1, 2,3 );
+		// new Face3( 1, 2,3 );
 
 		this.uuid = MathUtils.generateUUID();
 
@@ -1528,8 +1532,8 @@ export class Gmetry extends EventDispatcher {
 	}
 
 	dispose() {
-
-		this.dispatchEvent( { type: 'dispose' } );
+		// This is not required when used outside of THREE.
+		// this.dispatchEvent( { type: 'dispose' } );
 
 	}
 

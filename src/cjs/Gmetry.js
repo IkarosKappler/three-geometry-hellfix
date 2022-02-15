@@ -14,26 +14,12 @@
  *
  * @date 2022-02-11
  */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Gmetry = void 0;
 var three_1 = require("three");
 var DirectGeometry_1 = require("./DirectGeometry");
 var Face3_1 = require("./Face3");
+// import * as THREE from "three";
 var _m1 = new three_1.Matrix4();
 var _obj = new three_1.Object3D();
 var _offset = new three_1.Vector3();
@@ -47,36 +33,35 @@ var _offset = new three_1.Vector3();
 //     new THREE.Vector2(1.0, ratioI),
 //     new THREE.Vector2(1.0, ratioJ)
 //   ]);
-var Gmetry = /** @class */ (function (_super) {
-    __extends(Gmetry, _super);
+var Gmetry = /** @class */ (function () {
     function Gmetry() {
-        var _this = _super.call(this) || this;
-        new Face3_1.Face3(1, 2, 3);
-        _this.uuid = three_1.MathUtils.generateUUID();
-        _this.name = '';
-        _this.type = 'Geometry';
-        _this.vertices = [];
-        _this.colors = [];
-        _this.faces = [];
-        _this.faceVertexUvs = [[]];
-        _this.morphTargets = [];
-        _this.morphNormals = [];
-        _this.skinWeights = [];
-        _this.skinIndices = [];
-        _this.lineDistances = [];
-        _this.boundingBox = null;
-        _this.boundingSphere = null;
+        // super();
+        // EventDispatcher.call( this );
+        // new Face3( 1, 2,3 );
+        this.uuid = three_1.MathUtils.generateUUID();
+        this.name = '';
+        this.type = 'Geometry';
+        this.vertices = [];
+        this.colors = [];
+        this.faces = [];
+        this.faceVertexUvs = [[]];
+        this.morphTargets = [];
+        this.morphNormals = [];
+        this.skinWeights = [];
+        this.skinIndices = [];
+        this.lineDistances = [];
+        this.boundingBox = null;
+        this.boundingSphere = null;
         // update flags
-        _this.elementsNeedUpdate = false;
-        _this.verticesNeedUpdate = false;
-        _this.uvsNeedUpdate = false;
-        _this.normalsNeedUpdate = false;
-        _this.colorsNeedUpdate = false;
-        _this.lineDistancesNeedUpdate = false;
-        _this.groupsNeedUpdate = false;
+        this.elementsNeedUpdate = false;
+        this.verticesNeedUpdate = false;
+        this.uvsNeedUpdate = false;
+        this.normalsNeedUpdate = false;
+        this.colorsNeedUpdate = false;
+        this.lineDistancesNeedUpdate = false;
+        this.groupsNeedUpdate = false;
         // Added this line as 'prototype' is not really accessed in Typescript
-        _this.isGeometry = true;
-        return _this;
+        this.isGeometry = true;
     }
     Gmetry.prototype.applyMatrix4 = function (matrix) {
         var normalMatrix = new three_1.Matrix3().getNormalMatrix(matrix);
@@ -896,7 +881,8 @@ var Gmetry = /** @class */ (function (_super) {
         return this.applyMatrix4(matrix);
     };
     Gmetry.prototype.dispose = function () {
-        this.dispatchEvent({ type: 'dispose' });
+        // This is not required when used outside of THREE.
+        // this.dispatchEvent( { type: 'dispose' } );
     };
     Gmetry.createBufferGeometryFromObject = function (object) {
         var buffergeometry = new three_1.BufferGeometry();
@@ -923,7 +909,7 @@ var Gmetry = /** @class */ (function (_super) {
         return buffergeometry;
     };
     return Gmetry;
-}(three_1.EventDispatcher));
+}());
 exports.Gmetry = Gmetry;
 // Gmetry.prototype.isGeometry = true;
 //# sourceMappingURL=Gmetry.js.map

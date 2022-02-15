@@ -13,10 +13,10 @@
  *
  * @date 2022-02-11
  */
-import { Box3, BufferGeometry, Color, EventDispatcher, Sphere, Vector2, Vector3 } from "three";
+import { Box3, BufferGeometry, Color, Sphere, Vector2, Vector3 } from "three";
 import { Face3 } from "./Face3";
 import { MorphNormal } from "./interfaces";
-export declare class Gmetry extends EventDispatcher {
+export declare class Gmetry {
     uuid: string;
     name: string;
     type: string;

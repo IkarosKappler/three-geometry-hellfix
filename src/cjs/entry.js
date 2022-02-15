@@ -1,3 +1,3 @@
 // Expose all your components to the global scope here.
 
-globalThis.ThreeGeometryHellfix = require("./").ThreeGeometryHellfix;
+globalThis.ThreeGeometryHellfix = globalThis.TGH = require("./").ThreeGeometryHellfix;

@@ -14,4 +14,5 @@ __exportStar(require("./DirectGeometry"), exports);
 __exportStar(require("./Face3"), exports);
 __exportStar(require("./Gmetry"), exports);
 __exportStar(require("./interfaces"), exports);
+__exportStar(require("./mylibrary"), exports);
 //# sourceMappingURL=index.js.map

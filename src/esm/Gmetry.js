@@ -13,9 +13,10 @@
  *
  * @date 2022-02-11
  */
-import { Box3, BufferAttribute, BufferGeometry, Color, EventDispatcher, Float32BufferAttribute, MathUtils, Matrix3, Matrix4, Object3D, Sphere, Vector2, Vector3 } from "three";
+import { Box3, BufferAttribute, BufferGeometry, Color, Float32BufferAttribute, MathUtils, Matrix3, Matrix4, Object3D, Sphere, Vector2, Vector3 } from "three";
 import { DirectGeometry } from "./DirectGeometry";
 import { Face3 } from "./Face3";
+// import * as THREE from "three";
 const _m1 = new Matrix4();
 const _obj = new Object3D();
 const _offset = new Vector3();
@@ -29,10 +30,11 @@ const _offset = new Vector3();
 //     new THREE.Vector2(1.0, ratioI),
 //     new THREE.Vector2(1.0, ratioJ)
 //   ]);
-export class Gmetry extends EventDispatcher {
+export class Gmetry {
     constructor() {
-        super();
-        new Face3(1, 2, 3);
+        // super();
+        // EventDispatcher.call( this );
+        // new Face3( 1, 2,3 );
         this.uuid = MathUtils.generateUUID();
         this.name = '';
         this.type = 'Geometry';
@@ -873,7 +875,8 @@ export class Gmetry extends EventDispatcher {
         return this.applyMatrix4(matrix);
     }
     dispose() {
-        this.dispatchEvent({ type: 'dispose' });
+        // This is not required when used outside of THREE.
+        // this.dispatchEvent( { type: 'dispose' } );
     }
     static createBufferGeometryFromObject(object) {
         let buffergeometry = new BufferGeometry();
