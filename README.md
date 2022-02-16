@@ -1,8 +1,9 @@
 # three-geometry-hellfix
-A backport for the THREE.Geometry that went missing since r125. Name: Gmetry
+A backport for the THREE.Geometry that went missing since r125. Name: `TGH.Gmetry`.
 
 
-Instead of using
+In the old days one would have created custom geometries like this (using the
+`THREE.Geometry` class):
 ```javascript
 
     import * as THREE from "three";
@@ -27,7 +28,7 @@ Instead of using
 
 ```
 
-you will receive this error:
+Doing that with a threejs revision version > 0.124.* you will receive this error:
 ```
  error TS2339: Property 'Face3' does not exist on type '../@types/three/index")'.
 
@@ -54,7 +55,7 @@ but in my opinion the guide's solution is more a workaround of how to convert yo
 code from using THREE.Geometry to the extensive manner of expressing the code with THREE.BufferGeometry. 
 The BufferGeometry is surely a way more efficient implementation according to WebGL (as it is
 using float arrays/buffers instead of vertex and face arrays), but if you were used to create 
-your geometries programmatically this is just a very fresh kind of hell.
+your geometries programmatically porting all your code this way is just a very fresh kind of hell.
 
 
 I wonder why the maker(s) of THREE did not just restrict the use of THREE.Geometry to
@@ -62,7 +63,7 @@ generative purposes, and once the geometry was created convert it to BufferGeome
 get it rendered.
 
 To here is my solution for our kind of folks:
-It's the original file ttps://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
+It's the original file https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
 from the THREE project, ported to Typescript. And I splitted the file up and added types.
 
 Use it like this now:
@@ -94,9 +95,10 @@ Use it like this now:
 
 ### Note
 I renamed the `Geometry` class to `Gmetry` because the maintainers of THREE announced that the
-`THREE.BufferGeometry` might be renamed to `THREE.Geometry` (replacing the old Geometry class).
+`THREE.BufferGeometry` might be renamed to `THREE.Geometry` in the future (replacing the old 
+Geometry class).
 And I wanted to avoid naming collisions.
 
 
 Have fun, folks.
-Help your friend and do good!
+Help your friends and do good!
