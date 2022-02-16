@@ -17,4 +17,5 @@ export interface MorphTarget {
 export interface MorphNormal {
     vertexNormals: VertexNormals[];
     faceNormals: Array<Vector3>;
+    name: string;
 }

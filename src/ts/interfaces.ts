@@ -32,4 +32,5 @@ export interface Group {
  export interface MorphNormal {
     vertexNormals: VertexNormals[]; // Array<Vector3>; // TODO: check if Vector2?
     faceNormals: Array<Vector3>; // TODO: is Vector2?
+    name: string;
  }

@@ -16,6 +16,7 @@
 //  import * as THREE from "three";
 import { Vector2 } from "three";
 export class DirectGeometry {
+    // class DirectGeometry {
     constructor() {
         this.vertices = [];
         this.normals = [];
@@ -23,7 +24,7 @@ export class DirectGeometry {
         this.uvs = [];
         this.uvs2 = [];
         this.groups = [];
-        this.morphTargets = { position: null, normal: null };
+        this.morphTargets = {};
         this.skinWeights = [];
         this.skinIndices = [];
         // this.lineDistances = [];
@@ -35,6 +36,7 @@ export class DirectGeometry {
         this.colorsNeedUpdate = false;
         this.uvsNeedUpdate = false;
         this.groupsNeedUpdate = false;
+        // this.isGeometry = true;
     }
     computeGroups(geometry) {
         const groups = [];

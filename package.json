@@ -14,7 +14,8 @@
     "server": "npx http-server",
     "webpack": "npm run webpack:dev && npm run webpack:prod",
     "webpack:dev": "npx webpack --env=development --config webpack.config.js",
-    "webpack:prod": "npx webpack --env=production --config webpack.config.js"
+    "webpack:prod": "npx webpack --env=production --config webpack.config.js",
+    "copy_slice_lib": "cp -R ../threejs-slice-geometry-typescript/dist example/threejs-slice-geometry-typescript/dist/"
   },
   "author": "Ikaros Kappler",
   "license": "MIT",

@@ -1,43 +1,16 @@
 "use strict";
-/**
- * THE ORIGINAL SOURCE COOE IS HERE:
- *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
- *
- * This is a backport of the old (deprecated) THREE.Geometry class.
- *
- * It got deprecated in version r125 and was announced to be completely dropped in future versions.
- *
- * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
- *
- * And here this is a Typescript port, too. Enjoy!
- *    - Ikaros Kappler
- *
- * @date 2022-02-11
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Gmetry = void 0;
 var three_1 = require("three");
 var DirectGeometry_1 = require("./DirectGeometry");
 var Face3_1 = require("./Face3");
-// import * as THREE from "three";
 var _m1 = new three_1.Matrix4();
 var _obj = new three_1.Object3D();
 var _offset = new three_1.Vector3();
-// this.faceVertexUvs[0].push([
-//     new THREE.Vector2(0.0, ratioJ),
-//     new THREE.Vector2(0.0, ratioI),
-//     new THREE.Vector2(1.0, ratioJ)
-//   ]);
-//   this.faceVertexUvs[0].push([
-//     new THREE.Vector2(0.0, ratioI),
-//     new THREE.Vector2(1.0, ratioI),
-//     new THREE.Vector2(1.0, ratioJ)
-//   ]);
+// class Geometry extends EventDispatcher {
 var Gmetry = /** @class */ (function () {
     function Gmetry() {
         // super();
-        // EventDispatcher.call( this );
-        // new Face3( 1, 2,3 );
         this.uuid = three_1.MathUtils.generateUUID();
         this.name = '';
         this.type = 'Geometry';
@@ -60,7 +33,6 @@ var Gmetry = /** @class */ (function () {
         this.colorsNeedUpdate = false;
         this.lineDistancesNeedUpdate = false;
         this.groupsNeedUpdate = false;
-        // Added this line as 'prototype' is not really accessed in Typescript
         this.isGeometry = true;
     }
     Gmetry.prototype.applyMatrix4 = function (matrix) {
@@ -335,12 +307,13 @@ var Gmetry = /** @class */ (function () {
             }
         }
         // use temp geometry to compute face and vertex normals for each morph
+        // const tmpGeo = new Geometry(); // BEFORE
         var tmpGeo = new Gmetry();
         tmpGeo.faces = this.faces;
         for (var i = 0, il = this.morphTargets.length; i < il; i++) {
             // create on first access
             if (!this.morphNormals[i]) {
-                this.morphNormals[i] = {}; // TODO: is this typecast really necessary?
+                this.morphNormals[i] = {}; // TODO: check
                 this.morphNormals[i].faceNormals = [];
                 this.morphNormals[i].vertexNormals = [];
                 var dstNormalsFace = this.morphNormals[i].faceNormals;
@@ -446,9 +419,7 @@ var Gmetry = /** @class */ (function () {
                 for (var k = 0, kl = uvs2.length; k < kl; k++) {
                     uvsCopy.push(uvs2[k].clone());
                 }
-                // this.faceVertexUvs[ i ].push( uvsCopy );
-                // TODO: verify correctness
-                this.faceVertexUvs[i].push(uvsCopy);
+                this.faceVertexUvs[i].push(uvsCopy); // TODO: check
             }
         }
     };
@@ -527,7 +498,7 @@ var Gmetry = /** @class */ (function () {
         var length = faces.length;
         // tag faces
         for (var i = 0; i < length; i++) {
-            faces[i]._id = i; // TODO: can we use a proper type for _id?
+            faces[i]._id = i;
         }
         // sort faces
         function materialIndexSort(a, b) {
@@ -561,7 +532,7 @@ var Gmetry = /** @class */ (function () {
                 type: 'Geometry',
                 generator: 'Geometry.toJSON'
             },
-            // TODO: check this (this is new)
+            // TODO: check
             uuid: null,
             type: null,
             name: null,
@@ -675,18 +646,28 @@ var Gmetry = /** @class */ (function () {
     Gmetry.prototype.clone = function () {
         /*
          // Handle primitives
+
          const parameters = this.parameters;
+
          if ( parameters !== undefined ) {
+
          const values = [];
+
          for ( const key in parameters ) {
+
          values.push( parameters[ key ] );
+
          }
+
          const geometry = Object.create( this.constructor.prototype );
          this.constructor.apply( geometry, values );
          return geometry;
+
          }
+
          return new this.constructor().copy( this );
          */
+        // return new Geometry().copy( this ); // BEFORE
         return new Gmetry().copy(this);
     };
     Gmetry.prototype.copy = function (source) {
@@ -731,15 +712,13 @@ var Gmetry = /** @class */ (function () {
                     var uv = uvs[k];
                     uvsCopy.push(uv.clone());
                 }
-                this.faceVertexUvs[i].push(uvsCopy);
+                this.faceVertexUvs[i].push(uvsCopy); // TODO: check
             }
         }
         // morph targets
         var morphTargets = source.morphTargets;
         for (var i = 0, il = morphTargets.length; i < il; i++) {
-            // const morphTarget = {};
-            // TODO: verify correctness
-            var morphTarget = {};
+            var morphTarget = {}; // // TODO: check
             morphTarget.name = morphTargets[i].name;
             // vertices
             if (morphTargets[i].vertices !== undefined) {
@@ -760,13 +739,14 @@ var Gmetry = /** @class */ (function () {
         // morph normals
         var morphNormals = source.morphNormals;
         for (var i = 0, il = morphNormals.length; i < il; i++) {
-            var morphNormal = {};
+            var morphNormal = {}; // TODO: check
             // vertex normals
             if (morphNormals[i].vertexNormals !== undefined) {
                 morphNormal.vertexNormals = [];
                 for (var j = 0, jl = morphNormals[i].vertexNormals.length; j < jl; j++) {
                     var srcVertexNormal = morphNormals[i].vertexNormals[j];
-                    var destVertexNormal = {};
+                    // TODO: add type
+                    var destVertexNormal = { a: null, b: null, c: null }; // TODO: check
                     destVertexNormal.a = srcVertexNormal.a.clone();
                     destVertexNormal.b = srcVertexNormal.b.clone();
                     destVertexNormal.c = srcVertexNormal.c.clone();
@@ -911,5 +891,193 @@ var Gmetry = /** @class */ (function () {
     return Gmetry;
 }());
 exports.Gmetry = Gmetry;
-// Gmetry.prototype.isGeometry = true;
+// Geometry.prototype.isGeometry = true;
+// class DirectGeometry {
+// 	constructor() {
+// 		this.vertices = [];
+// 		this.normals = [];
+// 		this.colors = [];
+// 		this.uvs = [];
+// 		this.uvs2 = [];
+// 		this.groups = [];
+// 		this.morphTargets = {};
+// 		this.skinWeights = [];
+// 		this.skinIndices = [];
+// 		// this.lineDistances = [];
+// 		this.boundingBox = null;
+// 		this.boundingSphere = null;
+// 		// update flags
+// 		this.verticesNeedUpdate = false;
+// 		this.normalsNeedUpdate = false;
+// 		this.colorsNeedUpdate = false;
+// 		this.uvsNeedUpdate = false;
+// 		this.groupsNeedUpdate = false;
+// 		this.isGeometry = true;
+// 	}
+// 	computeGroups( geometry ) {
+// 		const groups = [];
+// 		let group, i;
+// 		let materialIndex = undefined;
+// 		const faces = geometry.faces;
+// 		for ( i = 0; i < faces.length; i ++ ) {
+// 			const face = faces[ i ];
+// 			// materials
+// 			if ( face.materialIndex !== materialIndex ) {
+// 				materialIndex = face.materialIndex;
+// 				if ( group !== undefined ) {
+// 					group.count = ( i * 3 ) - group.start;
+// 					groups.push( group );
+// 				}
+// 				group = {
+// 					start: i * 3,
+// 					materialIndex: materialIndex
+// 				};
+// 			}
+// 		}
+// 		if ( group !== undefined ) {
+// 			group.count = ( i * 3 ) - group.start;
+// 			groups.push( group );
+// 		}
+// 		this.groups = groups;
+// 	}
+// 	fromGeometry( geometry ) {
+// 		const faces = geometry.faces;
+// 		const vertices = geometry.vertices;
+// 		const faceVertexUvs = geometry.faceVertexUvs;
+// 		const hasFaceVertexUv = faceVertexUvs[ 0 ] && faceVertexUvs[ 0 ].length > 0;
+// 		const hasFaceVertexUv2 = faceVertexUvs[ 1 ] && faceVertexUvs[ 1 ].length > 0;
+// 		// morphs
+// 		const morphTargets = geometry.morphTargets;
+// 		const morphTargetsLength = morphTargets.length;
+// 		let morphTargetsPosition;
+// 		if ( morphTargetsLength > 0 ) {
+// 			morphTargetsPosition = [];
+// 			for ( let i = 0; i < morphTargetsLength; i ++ ) {
+// 				morphTargetsPosition[ i ] = {
+// 					name: morphTargets[ i ].name,
+// 				 	data: []
+// 				};
+// 			}
+// 			this.morphTargets.position = morphTargetsPosition;
+// 		}
+// 		const morphNormals = geometry.morphNormals;
+// 		const morphNormalsLength = morphNormals.length;
+// 		let morphTargetsNormal;
+// 		if ( morphNormalsLength > 0 ) {
+// 			morphTargetsNormal = [];
+// 			for ( let i = 0; i < morphNormalsLength; i ++ ) {
+// 				morphTargetsNormal[ i ] = {
+// 					name: morphNormals[ i ].name,
+// 				 	data: []
+// 				};
+// 			}
+// 			this.morphTargets.normal = morphTargetsNormal;
+// 		}
+// 		// skins
+// 		const skinIndices = geometry.skinIndices;
+// 		const skinWeights = geometry.skinWeights;
+// 		const hasSkinIndices = skinIndices.length === vertices.length;
+// 		const hasSkinWeights = skinWeights.length === vertices.length;
+// 		//
+// 		if ( vertices.length > 0 && faces.length === 0 ) {
+// 			console.error( 'THREE.DirectGeometry: Faceless geometries are not supported.' );
+// 		}
+// 		for ( let i = 0; i < faces.length; i ++ ) {
+// 			const face = faces[ i ];
+// 			this.vertices.push( vertices[ face.a ], vertices[ face.b ], vertices[ face.c ] );
+// 			const vertexNormals = face.vertexNormals;
+// 			if ( vertexNormals.length === 3 ) {
+// 				this.normals.push( vertexNormals[ 0 ], vertexNormals[ 1 ], vertexNormals[ 2 ] );
+// 			} else {
+// 				const normal = face.normal;
+// 				this.normals.push( normal, normal, normal );
+// 			}
+// 			const vertexColors = face.vertexColors;
+// 			if ( vertexColors.length === 3 ) {
+// 				this.colors.push( vertexColors[ 0 ], vertexColors[ 1 ], vertexColors[ 2 ] );
+// 			} else {
+// 				const color = face.color;
+// 				this.colors.push( color, color, color );
+// 			}
+// 			if ( hasFaceVertexUv === true ) {
+// 				const vertexUvs = faceVertexUvs[ 0 ][ i ];
+// 				if ( vertexUvs !== undefined ) {
+// 					this.uvs.push( vertexUvs[ 0 ], vertexUvs[ 1 ], vertexUvs[ 2 ] );
+// 				} else {
+// 					console.warn( 'THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i );
+// 					this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
+// 				}
+// 			}
+// 			if ( hasFaceVertexUv2 === true ) {
+// 				const vertexUvs = faceVertexUvs[ 1 ][ i ];
+// 				if ( vertexUvs !== undefined ) {
+// 					this.uvs2.push( vertexUvs[ 0 ], vertexUvs[ 1 ], vertexUvs[ 2 ] );
+// 				} else {
+// 					console.warn( 'THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i );
+// 					this.uvs2.push( new Vector2(), new Vector2(), new Vector2() );
+// 				}
+// 			}
+// 			// morphs
+// 			for ( let j = 0; j < morphTargetsLength; j ++ ) {
+// 				const morphTarget = morphTargets[ j ].vertices;
+// 				morphTargetsPosition[ j ].data.push( morphTarget[ face.a ], morphTarget[ face.b ], morphTarget[ face.c ] );
+// 			}
+// 			for ( let j = 0; j < morphNormalsLength; j ++ ) {
+// 				const morphNormal = morphNormals[ j ].vertexNormals[ i ];
+// 				morphTargetsNormal[ j ].data.push( morphNormal.a, morphNormal.b, morphNormal.c );
+// 			}
+// 			// skins
+// 			if ( hasSkinIndices ) {
+// 				this.skinIndices.push( skinIndices[ face.a ], skinIndices[ face.b ], skinIndices[ face.c ] );
+// 			}
+// 			if ( hasSkinWeights ) {
+// 				this.skinWeights.push( skinWeights[ face.a ], skinWeights[ face.b ], skinWeights[ face.c ] );
+// 			}
+// 		}
+// 		this.computeGroups( geometry );
+// 		this.verticesNeedUpdate = geometry.verticesNeedUpdate;
+// 		this.normalsNeedUpdate = geometry.normalsNeedUpdate;
+// 		this.colorsNeedUpdate = geometry.colorsNeedUpdate;
+// 		this.uvsNeedUpdate = geometry.uvsNeedUpdate;
+// 		this.groupsNeedUpdate = geometry.groupsNeedUpdate;
+// 		if ( geometry.boundingSphere !== null ) {
+// 			this.boundingSphere = geometry.boundingSphere.clone();
+// 		}
+// 		if ( geometry.boundingBox !== null ) {
+// 			this.boundingBox = geometry.boundingBox.clone();
+// 		}
+// 		return this;
+// 	}
+// }
+// class Face3 {
+// 	constructor( a, b, c, normal, color, materialIndex = 0 ) {
+// 		this.a = a;
+// 		this.b = b;
+// 		this.c = c;
+// 		this.normal = ( normal && normal.isVector3 ) ? normal : new Vector3();
+// 		this.vertexNormals = Array.isArray( normal ) ? normal : [];
+// 		this.color = ( color && color.isColor ) ? color : new Color();
+// 		this.vertexColors = Array.isArray( color ) ? color : [];
+// 		this.materialIndex = materialIndex;
+// 	}
+// 	clone() {
+// 		return new this.constructor().copy( this );
+// 	}
+// 	copy( source ) {
+// 		this.a = source.a;
+// 		this.b = source.b;
+// 		this.c = source.c;
+// 		this.normal.copy( source.normal );
+// 		this.color.copy( source.color );
+// 		this.materialIndex = source.materialIndex;
+// 		for ( let i = 0, il = source.vertexNormals.length; i < il; i ++ ) {
+// 			this.vertexNormals[ i ] = source.vertexNormals[ i ].clone();
+// 		}
+// 		for ( let i = 0, il = source.vertexColors.length; i < il; i ++ ) {
+// 			this.vertexColors[ i ] = source.vertexColors[ i ].clone();
+// 		}
+// 		return this;
+// 	}
+// }
+// export { Face3, Gmetry };
 //# sourceMappingURL=Gmetry.js.map

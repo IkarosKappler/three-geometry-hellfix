@@ -1,46 +1,6 @@
-/**
- * THE ORIGINAL SOURCE COOE IS HERE:
- *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
- * 
- * This is a backport of the old (deprecated) THREE.DirectGeometry class.
- * 
- * It got deprecated in version r125 and was announced to be completely dropped in future versions.
- * 
- * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
- * 
- * And here this is a Typescript port, too. Enjoy!
- *    - Ikaros Kappler
- * 
- * @date 2022-02-11
- */
+import { Vector2 } from '../math/Vector2.js';
 
-//  import * as THREE from "three";
-import { Box3, Color, Sphere, Vector2, Vector3 } from "three";
-import { Gmetry } from "./Gmetry";
-import { Group } from "./interfaces";
-
-
-export class DirectGeometry {
-
-    vertices:Array<Vector3>;
-    normals:Array<Vector3>;
-    colors:Array<Color>;
-    uvs:Array<Vector2>;
-    uvs2:Array<Vector2>;
-    groups:Array<Group>;
-    morphTargets: { position: Vector3; normal : Vector3}; // Array<MorphTarget>; // TODO: Record?
-    skinWeights: Array<any>; // TODO
-    skinIndices: Array<any>; // TODO
-    boundingBox: Box3; // correct?
-    boundingSphere: Sphere; // correct?
-    verticesNeedUpdate: boolean;
-    normalsNeedUpdate: boolean;
-    colorsNeedUpdate : boolean;
-    uvsNeedUpdate: boolean;
-    groupsNeedUpdate: boolean;
-
-
-// class DirectGeometry {
+class DirectGeometry {
 
 	constructor() {
 
@@ -52,7 +12,7 @@ export class DirectGeometry {
 
 		this.groups = [];
 
-		this.morphTargets = {} as { position: Vector3; normal : Vector3};
+		this.morphTargets = {};
 
 		this.skinWeights = [];
 		this.skinIndices = [];
@@ -70,7 +30,6 @@ export class DirectGeometry {
 		this.uvsNeedUpdate = false;
 		this.groupsNeedUpdate = false;
 
-		// this.isGeometry = true;
 	}
 
 	computeGroups( geometry ) {
@@ -319,3 +278,6 @@ export class DirectGeometry {
 	}
 
 }
+
+
+export { DirectGeometry };

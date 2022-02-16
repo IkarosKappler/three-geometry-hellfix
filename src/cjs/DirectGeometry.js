@@ -19,6 +19,7 @@ exports.DirectGeometry = void 0;
 //  import * as THREE from "three";
 var three_1 = require("three");
 var DirectGeometry = /** @class */ (function () {
+    // class DirectGeometry {
     function DirectGeometry() {
         this.vertices = [];
         this.normals = [];
@@ -26,7 +27,7 @@ var DirectGeometry = /** @class */ (function () {
         this.uvs = [];
         this.uvs2 = [];
         this.groups = [];
-        this.morphTargets = { position: null, normal: null };
+        this.morphTargets = {};
         this.skinWeights = [];
         this.skinIndices = [];
         // this.lineDistances = [];
@@ -38,6 +39,7 @@ var DirectGeometry = /** @class */ (function () {
         this.colorsNeedUpdate = false;
         this.uvsNeedUpdate = false;
         this.groupsNeedUpdate = false;
+        // this.isGeometry = true;
     }
     DirectGeometry.prototype.computeGroups = function (geometry) {
         var groups = [];

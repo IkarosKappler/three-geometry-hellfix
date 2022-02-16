@@ -1,21 +1,6 @@
-/**
- * THE ORIGINAL SOURCE COOE IS HERE:
- *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
- *
- * This is a backport of the old (deprecated) THREE.Geometry class.
- *
- * It got deprecated in version r125 and was announced to be completely dropped in future versions.
- *
- * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
- *
- * And here this is a Typescript port, too. Enjoy!
- *    - Ikaros Kappler
- *
- * @date 2022-02-11
- */
-import { Box3, BufferGeometry, Color, Sphere, Vector2, Vector3 } from "three";
-import { Face3 } from "./Face3";
-import { MorphNormal } from "./interfaces";
+import { Box3, BufferGeometry, Color, Sphere, Vector2, Vector3 } from 'three';
+import { Face3 } from './Face3';
+import { MorphNormal } from './interfaces';
 export declare class Gmetry {
     uuid: string;
     name: string;
