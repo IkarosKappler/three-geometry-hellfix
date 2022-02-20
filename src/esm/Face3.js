@@ -13,9 +13,7 @@
  *
  * @date 2022-02-11
  */
-// TODO: only import required types
-// import * as THREE from "three";
-import { Color, Vector3 } from "three";
+import { DefaultFactory } from "./DefaultFactory";
 export class Face3 {
     constructor(a, b, c, normal, color, materialIndex = 0) {
         this.a = a;
@@ -24,10 +22,15 @@ export class Face3 {
         // this.normal = ( normal && normal.isVector3 ) ? normal : new THREE.Vector3();
         // this.vertexNormals = Array.isArray( normal ) ? normal : [];
         // TODO: verify correctness
-        this.normal = (normal && (normal instanceof Vector3 && normal.isVector3)) ? normal : new Vector3();
+        // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new Vector3();
+        // TODO: use DefaultFactory here
+        // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new (window["THREE"]).Vector3();
+        this.normal = (normal && normal.isVector3) ? normal : DefaultFactory.newVector3();
         this.vertexNormals = Array.isArray(normal) ? normal : [];
         // this.color = ( color && color.isColor ) ? color : new THREE.Color();
-        this.color = (color && (color instanceof Color && color.isColor)) ? color : new Color(); // TODO: verify correctness
+        // this.color = ( color && ( color instanceof Color && color.isColor)  ) ? color : new Color(); // TODO: verify correctness
+        // TODO: use DefaultFactory here
+        this.color = (color && color.isColor) ? color : DefaultFactory.newColor(); // TODO: verify correctness
         this.vertexColors = Array.isArray(color) ? color : [];
         this.materialIndex = materialIndex;
     }

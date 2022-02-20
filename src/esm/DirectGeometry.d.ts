@@ -14,7 +14,7 @@
  * @date 2022-02-11
  */
 import { Box3, Color, Sphere, Vector2, Vector3 } from "three";
-import { Group } from "./interfaces";
+import { Group, ThreeFactory } from "./interfaces";
 export declare class DirectGeometry {
     vertices: Array<Vector3>;
     normals: Array<Vector3>;
@@ -35,7 +35,8 @@ export declare class DirectGeometry {
     colorsNeedUpdate: boolean;
     uvsNeedUpdate: boolean;
     groupsNeedUpdate: boolean;
-    constructor();
+    private factory;
+    constructor(factory: ThreeFactory);
     computeGroups(geometry: any): void;
     fromGeometry(geometry: any): this;
 }

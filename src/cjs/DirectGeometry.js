@@ -16,11 +16,10 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DirectGeometry = void 0;
-//  import * as THREE from "three";
-var three_1 = require("three");
+var DefaultFactory_1 = require("./DefaultFactory");
 var DirectGeometry = /** @class */ (function () {
     // class DirectGeometry {
-    function DirectGeometry() {
+    function DirectGeometry(factory) {
         this.vertices = [];
         this.normals = [];
         this.colors = [];
@@ -40,6 +39,7 @@ var DirectGeometry = /** @class */ (function () {
         this.uvsNeedUpdate = false;
         this.groupsNeedUpdate = false;
         // this.isGeometry = true;
+        this.factory = factory || DefaultFactory_1.DefaultFactory;
     }
     DirectGeometry.prototype.computeGroups = function (geometry) {
         var groups = [];
@@ -135,7 +135,9 @@ var DirectGeometry = /** @class */ (function () {
                 }
                 else {
                     console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i);
-                    this.uvs.push(new three_1.Vector2(), new three_1.Vector2(), new three_1.Vector2());
+                    // TODO: verify
+                    // this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
+                    this.uvs.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }
             if (hasFaceVertexUv2 === true) {
@@ -145,7 +147,9 @@ var DirectGeometry = /** @class */ (function () {
                 }
                 else {
                     console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i);
-                    this.uvs2.push(new three_1.Vector2(), new three_1.Vector2(), new three_1.Vector2());
+                    // TODO: verify
+                    // this.uvs2.push( new Vector2(), new Vector2(), new Vector2() ); 
+                    this.uvs2.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }
             // morphs

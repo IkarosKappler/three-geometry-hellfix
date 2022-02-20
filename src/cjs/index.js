@@ -1,18 +1,12 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./DirectGeometry"), exports);
-__exportStar(require("./Face3"), exports);
-__exportStar(require("./Gmetry"), exports);
-__exportStar(require("./interfaces"), exports);
-__exportStar(require("./mylibrary"), exports);
+exports.ThreeGeometryHellfix = exports.Gmetry = exports.Face3 = exports.DirectGeometry = void 0;
+var DirectGeometry_1 = require("./DirectGeometry");
+Object.defineProperty(exports, "DirectGeometry", { enumerable: true, get: function () { return DirectGeometry_1.DirectGeometry; } });
+var Face3_1 = require("./Face3");
+Object.defineProperty(exports, "Face3", { enumerable: true, get: function () { return Face3_1.Face3; } });
+var Gmetry_1 = require("./Gmetry");
+Object.defineProperty(exports, "Gmetry", { enumerable: true, get: function () { return Gmetry_1.Gmetry; } });
+var mylibrary_1 = require("./mylibrary");
+Object.defineProperty(exports, "ThreeGeometryHellfix", { enumerable: true, get: function () { return mylibrary_1.ThreeGeometryHellfix; } });
 //# sourceMappingURL=index.js.map

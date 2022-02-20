@@ -90,7 +90,17 @@ Use it like this now:
         );
     }
 
+    var bufferGeometry = myGeometry.toBufferGeometry();
+    // ... create mesh and add to scene ...
+    // ...
+    scene.add( new Mesh( bufferGeometry, material ) );
+    // ...
+
 ```
+
+## Get the example running
+Get a copy of threejs and copy it to `./exapple/three/`. Start a local web server (`npm run server`) and
+load `http://127.0.0.1:8080/example/index.html` in your browser.
 
 
 ### Note

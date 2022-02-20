@@ -1,6 +1,35 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/cjs/DefaultFactory.js":
+/*!***********************************!*\
+  !*** ./src/cjs/DefaultFactory.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// import { Matrix4, Object3D, Vector2, Vector3 } from "three";
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DefaultFactory = void 0;
+exports.DefaultFactory = {
+    newVector2: function (x, y) { return new window["THREE"].Vector2(x, y); },
+    newVector3: function (x, y, z) { return new window["THREE"].Vector3(x, y, z); },
+    newMatrix3: function () { return new window["THREE"].Matrix3(); },
+    newMatrix4: function () { return new window["THREE"].Matrix4(); },
+    newObject3D: function () { return new window["THREE"].Object3D(); },
+    newBox3: function () { return new window["THREE"].Box3(); },
+    newSphere: function () { return new window["THREE"].Sphere(); },
+    newBufferGeometry: function () { return new window["THREE"].BufferGeometry(); },
+    generateUUID: function () { return window["THREE"].MathUtils.generateUUID(); },
+    newFloat32BufferAttribute: function (array, itemSize, normalized) { return new window["THREE"].Float32BufferAttribute(array, itemSize, normalized); },
+    newColor: function () { return new window["THREE"].Color; },
+    newBufferAttribute: function (array, itemSize, normalized) { return new window["THREE"].BufferAttribute(array, itemSize, normalized); }
+};
+//# sourceMappingURL=DefaultFactory.js.map
+
+/***/ }),
+
 /***/ "./src/cjs/DirectGeometry.js":
 /*!***********************************!*\
   !*** ./src/cjs/DirectGeometry.js ***!
@@ -26,11 +55,10 @@
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DirectGeometry = void 0;
-//  import * as THREE from "three";
-var three_1 = __webpack_require__(/*! three */ "./node_modules/three/build/three.cjs");
+var DefaultFactory_1 = __webpack_require__(/*! ./DefaultFactory */ "./src/cjs/DefaultFactory.js");
 var DirectGeometry = /** @class */ (function () {
     // class DirectGeometry {
-    function DirectGeometry() {
+    function DirectGeometry(factory) {
         this.vertices = [];
         this.normals = [];
         this.colors = [];
@@ -50,6 +78,7 @@ var DirectGeometry = /** @class */ (function () {
         this.uvsNeedUpdate = false;
         this.groupsNeedUpdate = false;
         // this.isGeometry = true;
+        this.factory = factory || DefaultFactory_1.DefaultFactory;
     }
     DirectGeometry.prototype.computeGroups = function (geometry) {
         var groups = [];
@@ -145,7 +174,9 @@ var DirectGeometry = /** @class */ (function () {
                 }
                 else {
                     console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i);
-                    this.uvs.push(new three_1.Vector2(), new three_1.Vector2(), new three_1.Vector2());
+                    // TODO: verify
+                    // this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
+                    this.uvs.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }
             if (hasFaceVertexUv2 === true) {
@@ -155,7 +186,9 @@ var DirectGeometry = /** @class */ (function () {
                 }
                 else {
                     console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i);
-                    this.uvs2.push(new three_1.Vector2(), new three_1.Vector2(), new three_1.Vector2());
+                    // TODO: verify
+                    // this.uvs2.push( new Vector2(), new Vector2(), new Vector2() ); 
+                    this.uvs2.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }
             // morphs
@@ -221,9 +254,7 @@ exports.DirectGeometry = DirectGeometry;
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Face3 = void 0;
-// TODO: only import required types
-// import * as THREE from "three";
-var three_1 = __webpack_require__(/*! three */ "./node_modules/three/build/three.cjs");
+var DefaultFactory_1 = __webpack_require__(/*! ./DefaultFactory */ "./src/cjs/DefaultFactory.js");
 var Face3 = /** @class */ (function () {
     function Face3(a, b, c, normal, color, materialIndex) {
         if (materialIndex === void 0) { materialIndex = 0; }
@@ -233,10 +264,15 @@ var Face3 = /** @class */ (function () {
         // this.normal = ( normal && normal.isVector3 ) ? normal : new THREE.Vector3();
         // this.vertexNormals = Array.isArray( normal ) ? normal : [];
         // TODO: verify correctness
-        this.normal = (normal && (normal instanceof three_1.Vector3 && normal.isVector3)) ? normal : new three_1.Vector3();
+        // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new Vector3();
+        // TODO: use DefaultFactory here
+        // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new (window["THREE"]).Vector3();
+        this.normal = (normal && normal.isVector3) ? normal : DefaultFactory_1.DefaultFactory.newVector3();
         this.vertexNormals = Array.isArray(normal) ? normal : [];
         // this.color = ( color && color.isColor ) ? color : new THREE.Color();
-        this.color = (color && (color instanceof three_1.Color && color.isColor)) ? color : new three_1.Color(); // TODO: verify correctness
+        // this.color = ( color && ( color instanceof Color && color.isColor)  ) ? color : new Color(); // TODO: verify correctness
+        // TODO: use DefaultFactory here
+        this.color = (color && color.isColor) ? color : DefaultFactory_1.DefaultFactory.newColor(); // TODO: verify correctness
         this.vertexColors = Array.isArray(color) ? color : [];
         this.materialIndex = materialIndex;
     }
@@ -277,17 +313,17 @@ exports.Face3 = Face3;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Gmetry = void 0;
-var three_1 = __webpack_require__(/*! three */ "./node_modules/three/build/three.cjs");
+var DefaultFactory_1 = __webpack_require__(/*! ./DefaultFactory */ "./src/cjs/DefaultFactory.js");
 var DirectGeometry_1 = __webpack_require__(/*! ./DirectGeometry */ "./src/cjs/DirectGeometry.js");
 var Face3_1 = __webpack_require__(/*! ./Face3 */ "./src/cjs/Face3.js");
-var _m1 = new three_1.Matrix4();
-var _obj = new three_1.Object3D();
-var _offset = new three_1.Vector3();
+// const _m1 = new Matrix4();
+// const _obj = new Object3D();
+// const _offset = new Vector3();
 // class Geometry extends EventDispatcher {
 var Gmetry = /** @class */ (function () {
-    function Gmetry() {
+    function Gmetry(factory) {
         // super();
-        this.uuid = three_1.MathUtils.generateUUID();
+        // this.uuid = MathUtils.generateUUID();
         this.name = '';
         this.type = 'Geometry';
         this.vertices = [];
@@ -310,9 +346,16 @@ var Gmetry = /** @class */ (function () {
         this.lineDistancesNeedUpdate = false;
         this.groupsNeedUpdate = false;
         this.isGeometry = true;
+        this.factory = factory || DefaultFactory_1.DefaultFactory;
+        this.uuid = this.factory.generateUUID();
+        this._m1 = this.factory.newMatrix4();
+        this._obj = this.factory.newObject3D();
+        this._offset = this.factory.newVector3();
     }
     Gmetry.prototype.applyMatrix4 = function (matrix) {
-        var normalMatrix = new three_1.Matrix3().getNormalMatrix(matrix);
+        // TODO: verify
+        // const normalMatrix = new Matrix3().getNormalMatrix( matrix );
+        var normalMatrix = this.factory.newMatrix3().getNormalMatrix(matrix);
         for (var i = 0, il = this.vertices.length; i < il; i++) {
             var vertex = this.vertices[i];
             vertex.applyMatrix4(matrix);
@@ -336,38 +379,38 @@ var Gmetry = /** @class */ (function () {
     };
     Gmetry.prototype.rotateX = function (angle) {
         // rotate geometry around world x-axis
-        _m1.makeRotationX(angle);
-        this.applyMatrix4(_m1);
+        this._m1.makeRotationX(angle);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.rotateY = function (angle) {
         // rotate geometry around world y-axis
-        _m1.makeRotationY(angle);
-        this.applyMatrix4(_m1);
+        this._m1.makeRotationY(angle);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.rotateZ = function (angle) {
         // rotate geometry around world z-axis
-        _m1.makeRotationZ(angle);
-        this.applyMatrix4(_m1);
+        this._m1.makeRotationZ(angle);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.translate = function (x, y, z) {
         // translate geometry
-        _m1.makeTranslation(x, y, z);
-        this.applyMatrix4(_m1);
+        this._m1.makeTranslation(x, y, z);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.scale = function (x, y, z) {
         // scale geometry
-        _m1.makeScale(x, y, z);
-        this.applyMatrix4(_m1);
+        this._m1.makeScale(x, y, z);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.lookAt = function (vector) {
-        _obj.lookAt(vector);
-        _obj.updateMatrix();
-        this.applyMatrix4(_obj.matrix);
+        this._obj.lookAt(vector);
+        this._obj.updateMatrix();
+        this.applyMatrix4(this._obj.matrix);
         return this;
     };
     Gmetry.prototype.fromBufferGeometry = function (geometry) {
@@ -386,11 +429,17 @@ var Gmetry = /** @class */ (function () {
         if (uv2 !== undefined)
             this.faceVertexUvs[1] = [];
         for (var i = 0; i < position.count; i++) {
-            scope.vertices.push(new three_1.Vector3().fromBufferAttribute(position, i));
+            // TODO: verify
+            // scope.vertices.push( new Vector3().fromBufferAttribute( position, i ) );
+            scope.vertices.push(this.factory.newVector3().fromBufferAttribute(position, i));
             if (color !== undefined) {
-                scope.colors.push(new three_1.Color().fromBufferAttribute(color, i));
+                // TODO: verify
+                // scope.colors.push( new Color().fromBufferAttribute( color, i ) ); 
+                scope.colors.push(this.factory.newColor().fromBufferAttribute(color, i));
             }
         }
+        var factory = this.factory;
+        // TODO: put to helper functions
         function addFace(a, b, c, materialIndex) {
             var vertexColors = (color === undefined) ? [] : [
                 scope.colors[a].clone(),
@@ -398,24 +447,36 @@ var Gmetry = /** @class */ (function () {
                 scope.colors[c].clone()
             ];
             var vertexNormals = (normal === undefined) ? [] : [
-                new three_1.Vector3().fromBufferAttribute(normal, a),
-                new three_1.Vector3().fromBufferAttribute(normal, b),
-                new three_1.Vector3().fromBufferAttribute(normal, c)
+                // TODO: verify
+                // new Vector3().fromBufferAttribute( normal, a ),
+                // new Vector3().fromBufferAttribute( normal, b ),
+                // new Vector3().fromBufferAttribute( normal, c )
+                factory.newVector3().fromBufferAttribute(normal, a),
+                factory.newVector3().fromBufferAttribute(normal, b),
+                factory.newVector3().fromBufferAttribute(normal, c)
             ];
             var face = new Face3_1.Face3(a, b, c, vertexNormals, vertexColors, materialIndex);
             scope.faces.push(face);
             if (uv !== undefined) {
                 scope.faceVertexUvs[0].push([
-                    new three_1.Vector2().fromBufferAttribute(uv, a),
-                    new three_1.Vector2().fromBufferAttribute(uv, b),
-                    new three_1.Vector2().fromBufferAttribute(uv, c)
+                    // TODO: verify
+                    // new Vector2().fromBufferAttribute( uv, a ),
+                    // new Vector2().fromBufferAttribute( uv, b ),
+                    // new Vector2().fromBufferAttribute( uv, c )
+                    factory.newVector2().fromBufferAttribute(uv, a),
+                    factory.newVector2().fromBufferAttribute(uv, b),
+                    factory.newVector2().fromBufferAttribute(uv, c)
                 ]);
             }
             if (uv2 !== undefined) {
                 scope.faceVertexUvs[1].push([
-                    new three_1.Vector2().fromBufferAttribute(uv2, a),
-                    new three_1.Vector2().fromBufferAttribute(uv2, b),
-                    new three_1.Vector2().fromBufferAttribute(uv2, c)
+                    // TODO: verify
+                    // new Vector2().fromBufferAttribute( uv2, a ),
+                    // new Vector2().fromBufferAttribute( uv2, b ),
+                    // new Vector2().fromBufferAttribute( uv2, c )
+                    factory.newVector2().fromBufferAttribute(uv2, a),
+                    factory.newVector2().fromBufferAttribute(uv2, b),
+                    factory.newVector2().fromBufferAttribute(uv2, c)
                 ]);
             }
         }
@@ -458,8 +519,8 @@ var Gmetry = /** @class */ (function () {
     };
     Gmetry.prototype.center = function () {
         this.computeBoundingBox();
-        this.boundingBox.getCenter(_offset).negate();
-        this.translate(_offset.x, _offset.y, _offset.z);
+        this.boundingBox.getCenter(this._offset).negate();
+        this.translate(this._offset.x, this._offset.y, this._offset.z);
         return this;
     };
     Gmetry.prototype.normalize = function () {
@@ -467,13 +528,17 @@ var Gmetry = /** @class */ (function () {
         var center = this.boundingSphere.center;
         var radius = this.boundingSphere.radius;
         var s = radius === 0 ? 1 : 1.0 / radius;
-        var matrix = new three_1.Matrix4();
+        // TODO: verify
+        // const matrix = new Matrix4();
+        var matrix = this.factory.newMatrix4();
         matrix.set(s, 0, 0, -s * center.x, 0, s, 0, -s * center.y, 0, 0, s, -s * center.z, 0, 0, 0, 1);
         this.applyMatrix4(matrix);
         return this;
     };
     Gmetry.prototype.computeFaceNormals = function () {
-        var cb = new three_1.Vector3(), ab = new three_1.Vector3();
+        // TODO: verify
+        // const cb = new Vector3(), ab = new Vector3();
+        var cb = this.factory.newVector3(), ab = this.factory.newVector3();
         for (var f = 0, fl = this.faces.length; f < fl; f++) {
             var face = this.faces[f];
             var vA = this.vertices[face.a];
@@ -490,12 +555,16 @@ var Gmetry = /** @class */ (function () {
         if (areaWeighted === void 0) { areaWeighted = true; }
         var vertices = new Array(this.vertices.length);
         for (var v = 0, vl = this.vertices.length; v < vl; v++) {
-            vertices[v] = new three_1.Vector3();
+            // TODO: verify
+            // vertices[ v ] = new Vector3(); 
+            vertices[v] = this.factory.newVector3();
         }
         if (areaWeighted) {
             // vertex normals weighted by triangle areas
             // http://www.iquilezles.org/www/articles/normals/normals.htm
-            var cb = new three_1.Vector3(), ab = new three_1.Vector3();
+            // TODO: verify
+            // const cb = new Vector3(), ab = new Vector3(); 
+            var cb = this.factory.newVector3(), ab = this.factory.newVector3();
             for (var f = 0, fl = this.faces.length; f < fl; f++) {
                 var face = this.faces[f];
                 var vA = this.vertices[face.a];
@@ -584,7 +653,7 @@ var Gmetry = /** @class */ (function () {
         }
         // use temp geometry to compute face and vertex normals for each morph
         // const tmpGeo = new Geometry(); // BEFORE
-        var tmpGeo = new Gmetry();
+        var tmpGeo = new Gmetry(this.factory);
         tmpGeo.faces = this.faces;
         for (var i = 0, il = this.morphTargets.length; i < il; i++) {
             // create on first access
@@ -595,8 +664,11 @@ var Gmetry = /** @class */ (function () {
                 var dstNormalsFace = this.morphNormals[i].faceNormals;
                 var dstNormalsVertex = this.morphNormals[i].vertexNormals;
                 for (var f = 0, fl = this.faces.length; f < fl; f++) {
-                    var faceNormal = new three_1.Vector3();
-                    var vertexNormals = { a: new three_1.Vector3(), b: new three_1.Vector3(), c: new three_1.Vector3() };
+                    // TODO: vertify
+                    // const faceNormal = new Vector3(); 
+                    var faceNormal = this.factory.newVector3();
+                    // const vertexNormals = { a: new Vector3(), b: new Vector3(), c: new Vector3() }; 
+                    var vertexNormals = { a: this.factory.newVector3(), b: this.factory.newVector3(), c: this.factory.newVector3() };
                     dstNormalsFace.push(faceNormal);
                     dstNormalsVertex.push(vertexNormals);
                 }
@@ -627,13 +699,17 @@ var Gmetry = /** @class */ (function () {
     };
     Gmetry.prototype.computeBoundingBox = function () {
         if (this.boundingBox === null) {
-            this.boundingBox = new three_1.Box3();
+            // TODO: verify
+            // this.boundingBox = new Box3();
+            this.boundingBox = this.factory.newBox3();
         }
         this.boundingBox.setFromPoints(this.vertices);
     };
     Gmetry.prototype.computeBoundingSphere = function () {
         if (this.boundingSphere === null) {
-            this.boundingSphere = new three_1.Sphere();
+            // TODO: verify
+            // this.boundingSphere = new Sphere();
+            this.boundingSphere = this.factory.newSphere();
         }
         this.boundingSphere.setFromPoints(this.vertices);
     };
@@ -646,7 +722,9 @@ var Gmetry = /** @class */ (function () {
         var normalMatrix;
         var vertexOffset = this.vertices.length, vertices1 = this.vertices, vertices2 = geometry.vertices, faces1 = this.faces, faces2 = geometry.faces, colors1 = this.colors, colors2 = geometry.colors;
         if (matrix !== undefined) {
-            normalMatrix = new three_1.Matrix3().getNormalMatrix(matrix);
+            // TODO: verify
+            // normalMatrix = new Matrix3().getNormalMatrix( matrix ); 
+            normalMatrix = this.factory.newMatrix3().getNormalMatrix(matrix);
         }
         // vertices
         for (var i = 0, il = vertices2.length; i < il; i++) {
@@ -765,7 +843,9 @@ var Gmetry = /** @class */ (function () {
         this.vertices = [];
         for (var i = 0, l = points.length; i < l; i++) {
             var point = points[i];
-            this.vertices.push(new three_1.Vector3(point.x, point.y, point.z || 0));
+            // TODO: verify
+            // this.vertices.push( new Vector3( point.x, point.y, point.z || 0 ) );
+            this.vertices.push(this.factory.newVector3(point.x, point.y, point.z || 0));
         }
         return this;
     };
@@ -944,7 +1024,7 @@ var Gmetry = /** @class */ (function () {
          return new this.constructor().copy( this );
          */
         // return new Geometry().copy( this ); // BEFORE
-        return new Gmetry().copy(this);
+        return new Gmetry(this.factory).copy(this);
     };
     Gmetry.prototype.copy = function (source) {
         // reset
@@ -1074,25 +1154,37 @@ var Gmetry = /** @class */ (function () {
         return this;
     };
     Gmetry.prototype.toBufferGeometry = function () {
-        var geometry = new DirectGeometry_1.DirectGeometry().fromGeometry(this);
-        var buffergeometry = new three_1.BufferGeometry();
+        var geometry = new DirectGeometry_1.DirectGeometry(this.factory).fromGeometry(this);
+        // TODO: verify
+        // const buffergeometry = new BufferGeometry();
+        var buffergeometry = this.factory.newBufferGeometry();
         var positions = new Float32Array(geometry.vertices.length * 3);
-        buffergeometry.setAttribute('position', new three_1.BufferAttribute(positions, 3).copyVector3sArray(geometry.vertices));
+        // TODO: verfify
+        // buffergeometry.setAttribute( 'position', new BufferAttribute( positions, 3 ).copyVector3sArray( geometry.vertices ) );
+        buffergeometry.setAttribute('position', this.factory.newBufferAttribute(positions, 3).copyVector3sArray(geometry.vertices));
         if (geometry.normals.length > 0) {
             var normals = new Float32Array(geometry.normals.length * 3);
-            buffergeometry.setAttribute('normal', new three_1.BufferAttribute(normals, 3).copyVector3sArray(geometry.normals));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'normal', new BufferAttribute( normals, 3 ).copyVector3sArray( geometry.normals ) );
+            buffergeometry.setAttribute('normal', this.factory.newBufferAttribute(normals, 3).copyVector3sArray(geometry.normals));
         }
         if (geometry.colors.length > 0) {
             var colors = new Float32Array(geometry.colors.length * 3);
-            buffergeometry.setAttribute('color', new three_1.BufferAttribute(colors, 3).copyColorsArray(geometry.colors));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'color', new BufferAttribute( colors, 3 ).copyColorsArray( geometry.colors ) );
+            buffergeometry.setAttribute('color', this.factory.newBufferAttribute(colors, 3).copyColorsArray(geometry.colors));
         }
         if (geometry.uvs.length > 0) {
             var uvs = new Float32Array(geometry.uvs.length * 2);
-            buffergeometry.setAttribute('uv', new three_1.BufferAttribute(uvs, 2).copyVector2sArray(geometry.uvs));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'uv', new BufferAttribute( uvs, 2 ).copyVector2sArray( geometry.uvs ) );
+            buffergeometry.setAttribute('uv', this.factory.newBufferAttribute(uvs, 2).copyVector2sArray(geometry.uvs));
         }
         if (geometry.uvs2.length > 0) {
             var uvs2 = new Float32Array(geometry.uvs2.length * 2);
-            buffergeometry.setAttribute('uv2', new three_1.BufferAttribute(uvs2, 2).copyVector2sArray(geometry.uvs2));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'uv2', new BufferAttribute( uvs2, 2 ).copyVector2sArray( geometry.uvs2 ) );
+            buffergeometry.setAttribute('uv2', this.factory.newBufferAttribute(uvs2, 2).copyVector2sArray(geometry.uvs2));
         }
         // groups
         buffergeometry.groups = geometry.groups;
@@ -1102,7 +1194,9 @@ var Gmetry = /** @class */ (function () {
             var morphTargets = geometry.morphTargets[name_1];
             for (var i = 0, l = morphTargets.length; i < l; i++) {
                 var morphTarget = morphTargets[i];
-                var attribute = new three_1.Float32BufferAttribute(morphTarget.data.length * 3, 3);
+                // TODO: verify
+                // const attribute = new Float32BufferAttribute( morphTarget.data.length * 3, 3 );
+                var attribute = this.factory.newFloat32BufferAttribute(morphTarget.data.length * 3, 3);
                 attribute.name = morphTarget.name;
                 array.push(attribute.copyVector3sArray(morphTarget.data));
             }
@@ -1110,11 +1204,15 @@ var Gmetry = /** @class */ (function () {
         }
         // skinning
         if (geometry.skinIndices.length > 0) {
-            var skinIndices = new three_1.Float32BufferAttribute(geometry.skinIndices.length * 4, 4);
+            // TODO: verify
+            // const skinIndices = new Float32BufferAttribute( geometry.skinIndices.length * 4, 4 ); 
+            var skinIndices = this.factory.newFloat32BufferAttribute(geometry.skinIndices.length * 4, 4);
             buffergeometry.setAttribute('skinIndex', skinIndices.copyVector4sArray(geometry.skinIndices));
         }
         if (geometry.skinWeights.length > 0) {
-            var skinWeights = new three_1.Float32BufferAttribute(geometry.skinWeights.length * 4, 4);
+            // TODO: verify
+            // const skinWeights = new Float32BufferAttribute( geometry.skinWeights.length * 4, 4 );
+            var skinWeights = this.factory.newFloat32BufferAttribute(geometry.skinWeights.length * 4, 4);
             buffergeometry.setAttribute('skinWeight', skinWeights.copyVector4sArray(geometry.skinWeights));
         }
         //
@@ -1140,16 +1238,24 @@ var Gmetry = /** @class */ (function () {
         // This is not required when used outside of THREE.
         // this.dispatchEvent( { type: 'dispose' } );
     };
-    Gmetry.createBufferGeometryFromObject = function (object) {
-        var buffergeometry = new three_1.BufferGeometry();
+    Gmetry.createBufferGeometryFromObject = function (object, factory) {
+        var fact = factory || DefaultFactory_1.DefaultFactory;
+        // TODO: verify
+        // let buffergeometry = new BufferGeometry();
+        var buffergeometry = fact.newBufferGeometry();
         var geometry = object.geometry;
         if (object.isPoints || object.isLine) {
-            var positions = new three_1.Float32BufferAttribute(geometry.vertices.length * 3, 3);
-            var colors = new three_1.Float32BufferAttribute(geometry.colors.length * 3, 3);
+            // TODO: verify
+            // const positions = new Float32BufferAttribute( geometry.vertices.length * 3, 3 );
+            // const colors = new Float32BufferAttribute( geometry.colors.length * 3, 3 );
+            var positions = fact.newFloat32BufferAttribute(geometry.vertices.length * 3, 3);
+            var colors = fact.newFloat32BufferAttribute(geometry.colors.length * 3, 3);
             buffergeometry.setAttribute('position', positions.copyVector3sArray(geometry.vertices));
             buffergeometry.setAttribute('color', colors.copyColorsArray(geometry.colors));
             if (geometry.lineDistances && geometry.lineDistances.length === geometry.vertices.length) {
-                var lineDistances = new three_1.Float32BufferAttribute(geometry.lineDistances.length, 1);
+                // TODO: verify
+                // const lineDistances = new Float32BufferAttribute( geometry.lineDistances.length, 1 );
+                var lineDistances = fact.newFloat32BufferAttribute(geometry.lineDistances.length, 1);
                 buffergeometry.setAttribute('lineDistance', lineDistances.copyArray(geometry.lineDistances));
             }
             if (geometry.boundingSphere !== null) {
@@ -1360,57 +1466,25 @@ exports.Gmetry = Gmetry;
 
 /***/ }),
 
-/***/ "./src/cjs/entry.js":
-/*!**************************!*\
-  !*** ./src/cjs/entry.js ***!
-  \**************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-// Expose all your components to the global scope here.
-
-globalThis.ThreeGeometryHellfix = globalThis.TGH = __webpack_require__(/*! ./ */ "./src/cjs/index.js").ThreeGeometryHellfix;
-
-
-/***/ }),
-
 /***/ "./src/cjs/index.js":
 /*!**************************!*\
   !*** ./src/cjs/index.js ***!
   \**************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(/*! ./DirectGeometry */ "./src/cjs/DirectGeometry.js"), exports);
-__exportStar(__webpack_require__(/*! ./Face3 */ "./src/cjs/Face3.js"), exports);
-__exportStar(__webpack_require__(/*! ./Gmetry */ "./src/cjs/Gmetry.js"), exports);
-__exportStar(__webpack_require__(/*! ./interfaces */ "./src/cjs/interfaces.js"), exports);
-__exportStar(__webpack_require__(/*! ./mylibrary */ "./src/cjs/mylibrary.js"), exports);
+exports.ThreeGeometryHellfix = exports.Gmetry = exports.Face3 = exports.DirectGeometry = void 0;
+var DirectGeometry_1 = __webpack_require__(/*! ./DirectGeometry */ "./src/cjs/DirectGeometry.js");
+Object.defineProperty(exports, "DirectGeometry", ({ enumerable: true, get: function () { return DirectGeometry_1.DirectGeometry; } }));
+var Face3_1 = __webpack_require__(/*! ./Face3 */ "./src/cjs/Face3.js");
+Object.defineProperty(exports, "Face3", ({ enumerable: true, get: function () { return Face3_1.Face3; } }));
+var Gmetry_1 = __webpack_require__(/*! ./Gmetry */ "./src/cjs/Gmetry.js");
+Object.defineProperty(exports, "Gmetry", ({ enumerable: true, get: function () { return Gmetry_1.Gmetry; } }));
+var mylibrary_1 = __webpack_require__(/*! ./mylibrary */ "./src/cjs/mylibrary.js");
+Object.defineProperty(exports, "ThreeGeometryHellfix", ({ enumerable: true, get: function () { return mylibrary_1.ThreeGeometryHellfix; } }));
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ "./src/cjs/interfaces.js":
-/*!*******************************!*\
-  !*** ./src/cjs/interfaces.js ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-//# sourceMappingURL=interfaces.js.map
 
 /***/ }),
 
@@ -1424,13 +1498,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ThreeGeometryHellfix = void 0;
+var DefaultFactory_1 = __webpack_require__(/*! ./DefaultFactory */ "./src/cjs/DefaultFactory.js");
 var DirectGeometry_1 = __webpack_require__(/*! ./DirectGeometry */ "./src/cjs/DirectGeometry.js");
 var Face3_1 = __webpack_require__(/*! ./Face3 */ "./src/cjs/Face3.js");
 var Gmetry_1 = __webpack_require__(/*! ./Gmetry */ "./src/cjs/Gmetry.js");
 exports.ThreeGeometryHellfix = {
     DirectGeometry: DirectGeometry_1.DirectGeometry,
     Face3: Face3_1.Face3,
-    Gmetry: Gmetry_1.Gmetry
+    Gmetry: Gmetry_1.Gmetry,
+    DefaultFactory: DefaultFactory_1.DefaultFactory
 };
 //# sourceMappingURL=mylibrary.js.map
 
@@ -1456,114 +1532,25 @@ exports.ThreeGeometryHellfix = {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/chunk loaded */
-/******/ 	(() => {
-/******/ 		var deferred = [];
-/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
-/******/ 			if(chunkIds) {
-/******/ 				priority = priority || 0;
-/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-/******/ 				deferred[i] = [chunkIds, fn, priority];
-/******/ 				return;
-/******/ 			}
-/******/ 			var notFulfilled = Infinity;
-/******/ 			for (var i = 0; i < deferred.length; i++) {
-/******/ 				var [chunkIds, fn, priority] = deferred[i];
-/******/ 				var fulfilled = true;
-/******/ 				for (var j = 0; j < chunkIds.length; j++) {
-/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
-/******/ 						chunkIds.splice(j--, 1);
-/******/ 					} else {
-/******/ 						fulfilled = false;
-/******/ 						if(priority < notFulfilled) notFulfilled = priority;
-/******/ 					}
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferred.splice(i--, 1)
-/******/ 					var r = fn();
-/******/ 					if (r !== undefined) result = r;
-/******/ 				}
-/******/ 			}
-/******/ 			return result;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"main": 0
-/******/ 		};
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkIds[i]] = 0;
-/******/ 			}
-/******/ 			return __webpack_require__.O(result);
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkthree_geometry_hellfix"] = self["webpackChunkthree_geometry_hellfix"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendor"], () => (__webpack_require__("./src/cjs/entry.js")))
-/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!**************************!*\
+  !*** ./src/cjs/entry.js ***!
+  \**************************/
+// Expose all your components to the global scope here.
+
+globalThis.ThreeGeometryHellfix = globalThis.TGH = __webpack_require__(/*! ./ */ "./src/cjs/index.js").ThreeGeometryHellfix;
+
+})();
+
 /******/ })()
 ;
 //# sourceMappingURL=three-geometry-hellfix-main.js.map

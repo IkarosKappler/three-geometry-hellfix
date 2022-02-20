@@ -13,11 +13,10 @@
  *
  * @date 2022-02-11
  */
-//  import * as THREE from "three";
-import { Vector2 } from "three";
+import { DefaultFactory } from "./DefaultFactory";
 export class DirectGeometry {
     // class DirectGeometry {
-    constructor() {
+    constructor(factory) {
         this.vertices = [];
         this.normals = [];
         this.colors = [];
@@ -37,6 +36,7 @@ export class DirectGeometry {
         this.uvsNeedUpdate = false;
         this.groupsNeedUpdate = false;
         // this.isGeometry = true;
+        this.factory = factory || DefaultFactory;
     }
     computeGroups(geometry) {
         const groups = [];
@@ -132,7 +132,9 @@ export class DirectGeometry {
                 }
                 else {
                     console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i);
-                    this.uvs.push(new Vector2(), new Vector2(), new Vector2());
+                    // TODO: verify
+                    // this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
+                    this.uvs.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }
             if (hasFaceVertexUv2 === true) {
@@ -142,7 +144,9 @@ export class DirectGeometry {
                 }
                 else {
                     console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i);
-                    this.uvs2.push(new Vector2(), new Vector2(), new Vector2());
+                    // TODO: verify
+                    // this.uvs2.push( new Vector2(), new Vector2(), new Vector2() ); 
+                    this.uvs2.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }
             // morphs

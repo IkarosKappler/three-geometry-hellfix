@@ -1,6 +1,6 @@
 import { Box3, BufferGeometry, Color, Sphere, Vector2, Vector3 } from 'three';
 import { Face3 } from './Face3';
-import { MorphNormal } from './interfaces';
+import { MorphNormal, ThreeFactory } from './interfaces';
 export declare class Gmetry {
     uuid: string;
     name: string;
@@ -25,7 +25,11 @@ export declare class Gmetry {
     groupsNeedUpdate: boolean;
     parameters: object;
     isGeometry: boolean;
-    constructor();
+    private factory;
+    private _m1;
+    private _obj;
+    private _offset;
+    constructor(factory?: ThreeFactory);
     applyMatrix4(matrix: any): this;
     rotateX(angle: any): this;
     rotateY(angle: any): this;
@@ -65,5 +69,5 @@ export declare class Gmetry {
     computeLineDistances(): void;
     applyMatrix(matrix: any): this;
     dispose(): void;
-    static createBufferGeometryFromObject(object: any): BufferGeometry;
+    static createBufferGeometryFromObject(object: any, factory?: any): any;
 }

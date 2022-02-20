@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Gmetry = void 0;
-var three_1 = require("three");
+var DefaultFactory_1 = require("./DefaultFactory");
 var DirectGeometry_1 = require("./DirectGeometry");
 var Face3_1 = require("./Face3");
-var _m1 = new three_1.Matrix4();
-var _obj = new three_1.Object3D();
-var _offset = new three_1.Vector3();
+// const _m1 = new Matrix4();
+// const _obj = new Object3D();
+// const _offset = new Vector3();
 // class Geometry extends EventDispatcher {
 var Gmetry = /** @class */ (function () {
-    function Gmetry() {
+    function Gmetry(factory) {
         // super();
-        this.uuid = three_1.MathUtils.generateUUID();
+        // this.uuid = MathUtils.generateUUID();
         this.name = '';
         this.type = 'Geometry';
         this.vertices = [];
@@ -34,9 +34,16 @@ var Gmetry = /** @class */ (function () {
         this.lineDistancesNeedUpdate = false;
         this.groupsNeedUpdate = false;
         this.isGeometry = true;
+        this.factory = factory || DefaultFactory_1.DefaultFactory;
+        this.uuid = this.factory.generateUUID();
+        this._m1 = this.factory.newMatrix4();
+        this._obj = this.factory.newObject3D();
+        this._offset = this.factory.newVector3();
     }
     Gmetry.prototype.applyMatrix4 = function (matrix) {
-        var normalMatrix = new three_1.Matrix3().getNormalMatrix(matrix);
+        // TODO: verify
+        // const normalMatrix = new Matrix3().getNormalMatrix( matrix );
+        var normalMatrix = this.factory.newMatrix3().getNormalMatrix(matrix);
         for (var i = 0, il = this.vertices.length; i < il; i++) {
             var vertex = this.vertices[i];
             vertex.applyMatrix4(matrix);
@@ -60,38 +67,38 @@ var Gmetry = /** @class */ (function () {
     };
     Gmetry.prototype.rotateX = function (angle) {
         // rotate geometry around world x-axis
-        _m1.makeRotationX(angle);
-        this.applyMatrix4(_m1);
+        this._m1.makeRotationX(angle);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.rotateY = function (angle) {
         // rotate geometry around world y-axis
-        _m1.makeRotationY(angle);
-        this.applyMatrix4(_m1);
+        this._m1.makeRotationY(angle);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.rotateZ = function (angle) {
         // rotate geometry around world z-axis
-        _m1.makeRotationZ(angle);
-        this.applyMatrix4(_m1);
+        this._m1.makeRotationZ(angle);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.translate = function (x, y, z) {
         // translate geometry
-        _m1.makeTranslation(x, y, z);
-        this.applyMatrix4(_m1);
+        this._m1.makeTranslation(x, y, z);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.scale = function (x, y, z) {
         // scale geometry
-        _m1.makeScale(x, y, z);
-        this.applyMatrix4(_m1);
+        this._m1.makeScale(x, y, z);
+        this.applyMatrix4(this._m1);
         return this;
     };
     Gmetry.prototype.lookAt = function (vector) {
-        _obj.lookAt(vector);
-        _obj.updateMatrix();
-        this.applyMatrix4(_obj.matrix);
+        this._obj.lookAt(vector);
+        this._obj.updateMatrix();
+        this.applyMatrix4(this._obj.matrix);
         return this;
     };
     Gmetry.prototype.fromBufferGeometry = function (geometry) {
@@ -110,11 +117,17 @@ var Gmetry = /** @class */ (function () {
         if (uv2 !== undefined)
             this.faceVertexUvs[1] = [];
         for (var i = 0; i < position.count; i++) {
-            scope.vertices.push(new three_1.Vector3().fromBufferAttribute(position, i));
+            // TODO: verify
+            // scope.vertices.push( new Vector3().fromBufferAttribute( position, i ) );
+            scope.vertices.push(this.factory.newVector3().fromBufferAttribute(position, i));
             if (color !== undefined) {
-                scope.colors.push(new three_1.Color().fromBufferAttribute(color, i));
+                // TODO: verify
+                // scope.colors.push( new Color().fromBufferAttribute( color, i ) ); 
+                scope.colors.push(this.factory.newColor().fromBufferAttribute(color, i));
             }
         }
+        var factory = this.factory;
+        // TODO: put to helper functions
         function addFace(a, b, c, materialIndex) {
             var vertexColors = (color === undefined) ? [] : [
                 scope.colors[a].clone(),
@@ -122,24 +135,36 @@ var Gmetry = /** @class */ (function () {
                 scope.colors[c].clone()
             ];
             var vertexNormals = (normal === undefined) ? [] : [
-                new three_1.Vector3().fromBufferAttribute(normal, a),
-                new three_1.Vector3().fromBufferAttribute(normal, b),
-                new three_1.Vector3().fromBufferAttribute(normal, c)
+                // TODO: verify
+                // new Vector3().fromBufferAttribute( normal, a ),
+                // new Vector3().fromBufferAttribute( normal, b ),
+                // new Vector3().fromBufferAttribute( normal, c )
+                factory.newVector3().fromBufferAttribute(normal, a),
+                factory.newVector3().fromBufferAttribute(normal, b),
+                factory.newVector3().fromBufferAttribute(normal, c)
             ];
             var face = new Face3_1.Face3(a, b, c, vertexNormals, vertexColors, materialIndex);
             scope.faces.push(face);
             if (uv !== undefined) {
                 scope.faceVertexUvs[0].push([
-                    new three_1.Vector2().fromBufferAttribute(uv, a),
-                    new three_1.Vector2().fromBufferAttribute(uv, b),
-                    new three_1.Vector2().fromBufferAttribute(uv, c)
+                    // TODO: verify
+                    // new Vector2().fromBufferAttribute( uv, a ),
+                    // new Vector2().fromBufferAttribute( uv, b ),
+                    // new Vector2().fromBufferAttribute( uv, c )
+                    factory.newVector2().fromBufferAttribute(uv, a),
+                    factory.newVector2().fromBufferAttribute(uv, b),
+                    factory.newVector2().fromBufferAttribute(uv, c)
                 ]);
             }
             if (uv2 !== undefined) {
                 scope.faceVertexUvs[1].push([
-                    new three_1.Vector2().fromBufferAttribute(uv2, a),
-                    new three_1.Vector2().fromBufferAttribute(uv2, b),
-                    new three_1.Vector2().fromBufferAttribute(uv2, c)
+                    // TODO: verify
+                    // new Vector2().fromBufferAttribute( uv2, a ),
+                    // new Vector2().fromBufferAttribute( uv2, b ),
+                    // new Vector2().fromBufferAttribute( uv2, c )
+                    factory.newVector2().fromBufferAttribute(uv2, a),
+                    factory.newVector2().fromBufferAttribute(uv2, b),
+                    factory.newVector2().fromBufferAttribute(uv2, c)
                 ]);
             }
         }
@@ -182,8 +207,8 @@ var Gmetry = /** @class */ (function () {
     };
     Gmetry.prototype.center = function () {
         this.computeBoundingBox();
-        this.boundingBox.getCenter(_offset).negate();
-        this.translate(_offset.x, _offset.y, _offset.z);
+        this.boundingBox.getCenter(this._offset).negate();
+        this.translate(this._offset.x, this._offset.y, this._offset.z);
         return this;
     };
     Gmetry.prototype.normalize = function () {
@@ -191,13 +216,17 @@ var Gmetry = /** @class */ (function () {
         var center = this.boundingSphere.center;
         var radius = this.boundingSphere.radius;
         var s = radius === 0 ? 1 : 1.0 / radius;
-        var matrix = new three_1.Matrix4();
+        // TODO: verify
+        // const matrix = new Matrix4();
+        var matrix = this.factory.newMatrix4();
         matrix.set(s, 0, 0, -s * center.x, 0, s, 0, -s * center.y, 0, 0, s, -s * center.z, 0, 0, 0, 1);
         this.applyMatrix4(matrix);
         return this;
     };
     Gmetry.prototype.computeFaceNormals = function () {
-        var cb = new three_1.Vector3(), ab = new three_1.Vector3();
+        // TODO: verify
+        // const cb = new Vector3(), ab = new Vector3();
+        var cb = this.factory.newVector3(), ab = this.factory.newVector3();
         for (var f = 0, fl = this.faces.length; f < fl; f++) {
             var face = this.faces[f];
             var vA = this.vertices[face.a];
@@ -214,12 +243,16 @@ var Gmetry = /** @class */ (function () {
         if (areaWeighted === void 0) { areaWeighted = true; }
         var vertices = new Array(this.vertices.length);
         for (var v = 0, vl = this.vertices.length; v < vl; v++) {
-            vertices[v] = new three_1.Vector3();
+            // TODO: verify
+            // vertices[ v ] = new Vector3(); 
+            vertices[v] = this.factory.newVector3();
         }
         if (areaWeighted) {
             // vertex normals weighted by triangle areas
             // http://www.iquilezles.org/www/articles/normals/normals.htm
-            var cb = new three_1.Vector3(), ab = new three_1.Vector3();
+            // TODO: verify
+            // const cb = new Vector3(), ab = new Vector3(); 
+            var cb = this.factory.newVector3(), ab = this.factory.newVector3();
             for (var f = 0, fl = this.faces.length; f < fl; f++) {
                 var face = this.faces[f];
                 var vA = this.vertices[face.a];
@@ -308,7 +341,7 @@ var Gmetry = /** @class */ (function () {
         }
         // use temp geometry to compute face and vertex normals for each morph
         // const tmpGeo = new Geometry(); // BEFORE
-        var tmpGeo = new Gmetry();
+        var tmpGeo = new Gmetry(this.factory);
         tmpGeo.faces = this.faces;
         for (var i = 0, il = this.morphTargets.length; i < il; i++) {
             // create on first access
@@ -319,8 +352,11 @@ var Gmetry = /** @class */ (function () {
                 var dstNormalsFace = this.morphNormals[i].faceNormals;
                 var dstNormalsVertex = this.morphNormals[i].vertexNormals;
                 for (var f = 0, fl = this.faces.length; f < fl; f++) {
-                    var faceNormal = new three_1.Vector3();
-                    var vertexNormals = { a: new three_1.Vector3(), b: new three_1.Vector3(), c: new three_1.Vector3() };
+                    // TODO: vertify
+                    // const faceNormal = new Vector3(); 
+                    var faceNormal = this.factory.newVector3();
+                    // const vertexNormals = { a: new Vector3(), b: new Vector3(), c: new Vector3() }; 
+                    var vertexNormals = { a: this.factory.newVector3(), b: this.factory.newVector3(), c: this.factory.newVector3() };
                     dstNormalsFace.push(faceNormal);
                     dstNormalsVertex.push(vertexNormals);
                 }
@@ -351,13 +387,17 @@ var Gmetry = /** @class */ (function () {
     };
     Gmetry.prototype.computeBoundingBox = function () {
         if (this.boundingBox === null) {
-            this.boundingBox = new three_1.Box3();
+            // TODO: verify
+            // this.boundingBox = new Box3();
+            this.boundingBox = this.factory.newBox3();
         }
         this.boundingBox.setFromPoints(this.vertices);
     };
     Gmetry.prototype.computeBoundingSphere = function () {
         if (this.boundingSphere === null) {
-            this.boundingSphere = new three_1.Sphere();
+            // TODO: verify
+            // this.boundingSphere = new Sphere();
+            this.boundingSphere = this.factory.newSphere();
         }
         this.boundingSphere.setFromPoints(this.vertices);
     };
@@ -370,7 +410,9 @@ var Gmetry = /** @class */ (function () {
         var normalMatrix;
         var vertexOffset = this.vertices.length, vertices1 = this.vertices, vertices2 = geometry.vertices, faces1 = this.faces, faces2 = geometry.faces, colors1 = this.colors, colors2 = geometry.colors;
         if (matrix !== undefined) {
-            normalMatrix = new three_1.Matrix3().getNormalMatrix(matrix);
+            // TODO: verify
+            // normalMatrix = new Matrix3().getNormalMatrix( matrix ); 
+            normalMatrix = this.factory.newMatrix3().getNormalMatrix(matrix);
         }
         // vertices
         for (var i = 0, il = vertices2.length; i < il; i++) {
@@ -489,7 +531,9 @@ var Gmetry = /** @class */ (function () {
         this.vertices = [];
         for (var i = 0, l = points.length; i < l; i++) {
             var point = points[i];
-            this.vertices.push(new three_1.Vector3(point.x, point.y, point.z || 0));
+            // TODO: verify
+            // this.vertices.push( new Vector3( point.x, point.y, point.z || 0 ) );
+            this.vertices.push(this.factory.newVector3(point.x, point.y, point.z || 0));
         }
         return this;
     };
@@ -668,7 +712,7 @@ var Gmetry = /** @class */ (function () {
          return new this.constructor().copy( this );
          */
         // return new Geometry().copy( this ); // BEFORE
-        return new Gmetry().copy(this);
+        return new Gmetry(this.factory).copy(this);
     };
     Gmetry.prototype.copy = function (source) {
         // reset
@@ -798,25 +842,37 @@ var Gmetry = /** @class */ (function () {
         return this;
     };
     Gmetry.prototype.toBufferGeometry = function () {
-        var geometry = new DirectGeometry_1.DirectGeometry().fromGeometry(this);
-        var buffergeometry = new three_1.BufferGeometry();
+        var geometry = new DirectGeometry_1.DirectGeometry(this.factory).fromGeometry(this);
+        // TODO: verify
+        // const buffergeometry = new BufferGeometry();
+        var buffergeometry = this.factory.newBufferGeometry();
         var positions = new Float32Array(geometry.vertices.length * 3);
-        buffergeometry.setAttribute('position', new three_1.BufferAttribute(positions, 3).copyVector3sArray(geometry.vertices));
+        // TODO: verfify
+        // buffergeometry.setAttribute( 'position', new BufferAttribute( positions, 3 ).copyVector3sArray( geometry.vertices ) );
+        buffergeometry.setAttribute('position', this.factory.newBufferAttribute(positions, 3).copyVector3sArray(geometry.vertices));
         if (geometry.normals.length > 0) {
             var normals = new Float32Array(geometry.normals.length * 3);
-            buffergeometry.setAttribute('normal', new three_1.BufferAttribute(normals, 3).copyVector3sArray(geometry.normals));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'normal', new BufferAttribute( normals, 3 ).copyVector3sArray( geometry.normals ) );
+            buffergeometry.setAttribute('normal', this.factory.newBufferAttribute(normals, 3).copyVector3sArray(geometry.normals));
         }
         if (geometry.colors.length > 0) {
             var colors = new Float32Array(geometry.colors.length * 3);
-            buffergeometry.setAttribute('color', new three_1.BufferAttribute(colors, 3).copyColorsArray(geometry.colors));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'color', new BufferAttribute( colors, 3 ).copyColorsArray( geometry.colors ) );
+            buffergeometry.setAttribute('color', this.factory.newBufferAttribute(colors, 3).copyColorsArray(geometry.colors));
         }
         if (geometry.uvs.length > 0) {
             var uvs = new Float32Array(geometry.uvs.length * 2);
-            buffergeometry.setAttribute('uv', new three_1.BufferAttribute(uvs, 2).copyVector2sArray(geometry.uvs));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'uv', new BufferAttribute( uvs, 2 ).copyVector2sArray( geometry.uvs ) );
+            buffergeometry.setAttribute('uv', this.factory.newBufferAttribute(uvs, 2).copyVector2sArray(geometry.uvs));
         }
         if (geometry.uvs2.length > 0) {
             var uvs2 = new Float32Array(geometry.uvs2.length * 2);
-            buffergeometry.setAttribute('uv2', new three_1.BufferAttribute(uvs2, 2).copyVector2sArray(geometry.uvs2));
+            // TODO: verfify
+            // buffergeometry.setAttribute( 'uv2', new BufferAttribute( uvs2, 2 ).copyVector2sArray( geometry.uvs2 ) );
+            buffergeometry.setAttribute('uv2', this.factory.newBufferAttribute(uvs2, 2).copyVector2sArray(geometry.uvs2));
         }
         // groups
         buffergeometry.groups = geometry.groups;
@@ -826,7 +882,9 @@ var Gmetry = /** @class */ (function () {
             var morphTargets = geometry.morphTargets[name_1];
             for (var i = 0, l = morphTargets.length; i < l; i++) {
                 var morphTarget = morphTargets[i];
-                var attribute = new three_1.Float32BufferAttribute(morphTarget.data.length * 3, 3);
+                // TODO: verify
+                // const attribute = new Float32BufferAttribute( morphTarget.data.length * 3, 3 );
+                var attribute = this.factory.newFloat32BufferAttribute(morphTarget.data.length * 3, 3);
                 attribute.name = morphTarget.name;
                 array.push(attribute.copyVector3sArray(morphTarget.data));
             }
@@ -834,11 +892,15 @@ var Gmetry = /** @class */ (function () {
         }
         // skinning
         if (geometry.skinIndices.length > 0) {
-            var skinIndices = new three_1.Float32BufferAttribute(geometry.skinIndices.length * 4, 4);
+            // TODO: verify
+            // const skinIndices = new Float32BufferAttribute( geometry.skinIndices.length * 4, 4 ); 
+            var skinIndices = this.factory.newFloat32BufferAttribute(geometry.skinIndices.length * 4, 4);
             buffergeometry.setAttribute('skinIndex', skinIndices.copyVector4sArray(geometry.skinIndices));
         }
         if (geometry.skinWeights.length > 0) {
-            var skinWeights = new three_1.Float32BufferAttribute(geometry.skinWeights.length * 4, 4);
+            // TODO: verify
+            // const skinWeights = new Float32BufferAttribute( geometry.skinWeights.length * 4, 4 );
+            var skinWeights = this.factory.newFloat32BufferAttribute(geometry.skinWeights.length * 4, 4);
             buffergeometry.setAttribute('skinWeight', skinWeights.copyVector4sArray(geometry.skinWeights));
         }
         //
@@ -864,16 +926,24 @@ var Gmetry = /** @class */ (function () {
         // This is not required when used outside of THREE.
         // this.dispatchEvent( { type: 'dispose' } );
     };
-    Gmetry.createBufferGeometryFromObject = function (object) {
-        var buffergeometry = new three_1.BufferGeometry();
+    Gmetry.createBufferGeometryFromObject = function (object, factory) {
+        var fact = factory || DefaultFactory_1.DefaultFactory;
+        // TODO: verify
+        // let buffergeometry = new BufferGeometry();
+        var buffergeometry = fact.newBufferGeometry();
         var geometry = object.geometry;
         if (object.isPoints || object.isLine) {
-            var positions = new three_1.Float32BufferAttribute(geometry.vertices.length * 3, 3);
-            var colors = new three_1.Float32BufferAttribute(geometry.colors.length * 3, 3);
+            // TODO: verify
+            // const positions = new Float32BufferAttribute( geometry.vertices.length * 3, 3 );
+            // const colors = new Float32BufferAttribute( geometry.colors.length * 3, 3 );
+            var positions = fact.newFloat32BufferAttribute(geometry.vertices.length * 3, 3);
+            var colors = fact.newFloat32BufferAttribute(geometry.colors.length * 3, 3);
             buffergeometry.setAttribute('position', positions.copyVector3sArray(geometry.vertices));
             buffergeometry.setAttribute('color', colors.copyColorsArray(geometry.colors));
             if (geometry.lineDistances && geometry.lineDistances.length === geometry.vertices.length) {
-                var lineDistances = new three_1.Float32BufferAttribute(geometry.lineDistances.length, 1);
+                // TODO: verify
+                // const lineDistances = new Float32BufferAttribute( geometry.lineDistances.length, 1 );
+                var lineDistances = fact.newFloat32BufferAttribute(geometry.lineDistances.length, 1);
                 buffergeometry.setAttribute('lineDistance', lineDistances.copyArray(geometry.lineDistances));
             }
             if (geometry.boundingSphere !== null) {

@@ -15,7 +15,7 @@
     "webpack": "npm run webpack:dev && npm run webpack:prod",
     "webpack:dev": "npx webpack --env=development --config webpack.config.js",
     "webpack:prod": "npx webpack --env=production --config webpack.config.js",
-    "copy_slice_lib": "cp -R ../threejs-slice-geometry-typescript/dist example/threejs-slice-geometry-typescript/dist/"
+    "copy_slice_lib": "cp -R ../threejs-slice-geometry-typescript/dist example/threejs-slice-geometry-typescript/"
   },
   "author": "Ikaros Kappler",
   "license": "MIT",
@@ -27,7 +27,6 @@
   "devDependencies": {
     "mocha": "^9.1.2",
     "terser-webpack-plugin": "^5.2.4",
-    "three": "^0.137.5",
     "threejs-slice-geometry-typescript": "^0.2.2",
     "webpack": "^5.54.0",
     "webpack-cli": "^4.8.0"

@@ -15,9 +15,11 @@
  */
 
 //  import * as THREE from "three";
+// import * as TEST from "@types/three/index";
 import { Box3, Color, Sphere, Vector2, Vector3 } from "three";
-import { Gmetry } from "./Gmetry";
-import { Group } from "./interfaces";
+import { DefaultFactory } from "./DefaultFactory";
+// import { Box3, Color, Sphere, Vector2, Vector3 } from "@types/three/src/";
+import { Group, ThreeFactory } from "./interfaces";
 
 
 export class DirectGeometry {
@@ -39,10 +41,12 @@ export class DirectGeometry {
     uvsNeedUpdate: boolean;
     groupsNeedUpdate: boolean;
 
+	private factory:ThreeFactory;
+
 
 // class DirectGeometry {
 
-	constructor() {
+	constructor(factory:ThreeFactory) {
 
 		this.vertices = [];
 		this.normals = [];
@@ -71,6 +75,7 @@ export class DirectGeometry {
 		this.groupsNeedUpdate = false;
 
 		// this.isGeometry = true;
+		this.factory = factory || DefaultFactory;
 	}
 
 	computeGroups( geometry ) {
@@ -236,7 +241,9 @@ export class DirectGeometry {
 
 					console.warn( 'THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i );
 
-					this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
+					// TODO: verify
+					// this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
+					this.uvs.push( this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2() );
 
 				}
 
@@ -254,7 +261,9 @@ export class DirectGeometry {
 
 					console.warn( 'THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i );
 
-					this.uvs2.push( new Vector2(), new Vector2(), new Vector2() );
+					// TODO: verify
+					// this.uvs2.push( new Vector2(), new Vector2(), new Vector2() ); 
+					this.uvs2.push( this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2() );
 
 				}
 

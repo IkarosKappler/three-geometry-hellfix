@@ -16,9 +16,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Face3 = void 0;
-// TODO: only import required types
-// import * as THREE from "three";
-var three_1 = require("three");
+var DefaultFactory_1 = require("./DefaultFactory");
 var Face3 = /** @class */ (function () {
     function Face3(a, b, c, normal, color, materialIndex) {
         if (materialIndex === void 0) { materialIndex = 0; }
@@ -28,10 +26,15 @@ var Face3 = /** @class */ (function () {
         // this.normal = ( normal && normal.isVector3 ) ? normal : new THREE.Vector3();
         // this.vertexNormals = Array.isArray( normal ) ? normal : [];
         // TODO: verify correctness
-        this.normal = (normal && (normal instanceof three_1.Vector3 && normal.isVector3)) ? normal : new three_1.Vector3();
+        // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new Vector3();
+        // TODO: use DefaultFactory here
+        // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new (window["THREE"]).Vector3();
+        this.normal = (normal && normal.isVector3) ? normal : DefaultFactory_1.DefaultFactory.newVector3();
         this.vertexNormals = Array.isArray(normal) ? normal : [];
         // this.color = ( color && color.isColor ) ? color : new THREE.Color();
-        this.color = (color && (color instanceof three_1.Color && color.isColor)) ? color : new three_1.Color(); // TODO: verify correctness
+        // this.color = ( color && ( color instanceof Color && color.isColor)  ) ? color : new Color(); // TODO: verify correctness
+        // TODO: use DefaultFactory here
+        this.color = (color && color.isColor) ? color : DefaultFactory_1.DefaultFactory.newColor(); // TODO: verify correctness
         this.vertexColors = Array.isArray(color) ? color : [];
         this.materialIndex = materialIndex;
     }
