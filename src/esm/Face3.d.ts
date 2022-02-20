@@ -14,6 +14,7 @@
  * @date 2022-02-11
  */
 import { Color, Vector3 } from "three";
+import { ThreeFactory } from "./interfaces";
 export declare class Face3 {
     a: number;
     b: number;
@@ -26,7 +27,7 @@ export declare class Face3 {
     __originalFaceNormal: Vector3;
     __originalVertexNormals: Array<Vector3>;
     _id: any;
-    constructor(a: number, b: number, c: number, normal?: Vector3 | Array<Vector3>, color?: Array<Color> | string | number | Color, materialIndex?: number);
+    constructor(a: number, b: number, c: number, normal?: Vector3 | Array<Vector3>, color?: Array<Color> | string | number | Color, materialIndex?: number, factory?: ThreeFactory);
     clone(): Face3;
     copy(source: any): this;
 }

@@ -1,4 +1,19 @@
-import { Box3, BufferGeometry, Color, Sphere, Vector2, Vector3 } from 'three';
+/**
+ * THE ORIGINAL SOURCE COOE IS HERE:
+ *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
+ *
+ * This is a backport of the old (deprecated) THREE.Face3 class.
+ *
+ * It got deprecated in version r125 and was announced to be completely dropped in future versions.
+ *
+ * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
+ *
+ * And here this is a Typescript port, too. Enjoy!
+ *    - Ikaros Kappler
+ *
+ * @date 2022-02-11
+ */
+import { Box3, Color, Sphere, Vector2, Vector3 } from 'three';
 import { Face3 } from './Face3';
 import { MorphNormal, ThreeFactory } from './interfaces';
 export declare class Gmetry {
@@ -64,7 +79,7 @@ export declare class Gmetry {
     };
     clone(): Gmetry;
     copy(source: any): this;
-    toBufferGeometry(): BufferGeometry;
+    toBufferGeometry(): import("three").BufferGeometry;
     computeTangents(): void;
     computeLineDistances(): void;
     applyMatrix(matrix: any): this;

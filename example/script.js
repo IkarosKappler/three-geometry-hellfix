@@ -58,10 +58,11 @@
             //   side: THREE.DoubleSide
             // });
             var mapMaterial = new THREE.MeshBasicMaterial({
-              color: 0x484848,
+              color: 0xffffff, // 0x484848,
               transparent: true,
               opacity: 0.35,
-              side: THREE.DoubleSide
+              side: THREE.DoubleSide,
+              wireframe: true
             })
 
             var PlaneHelper = function(plane) {
@@ -124,8 +125,8 @@
         //     scene.add( new THREE.Mesh( geom, mapMaterial ) );
 
             var bgeom = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-            m.setPosition(new THREE.Vector3(1.2, -.8, 0));
-            bgeom.applyMatrix(m);
+            // m.setPosition(new THREE.Vector3(1.2, -.8, 0));
+            bgeom.applyMatrix4(m);
             var geom = new TGH.Gmetry().fromBufferGeometry(bgeom);
             geom = sliceGeometry(geom, plane);
             scene.add( new THREE.Mesh( geom.toBufferGeometry(), mapMaterial ) );

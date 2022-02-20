@@ -256,8 +256,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Face3 = void 0;
 var DefaultFactory_1 = __webpack_require__(/*! ./DefaultFactory */ "./src/cjs/DefaultFactory.js");
 var Face3 = /** @class */ (function () {
-    function Face3(a, b, c, normal, color, materialIndex) {
+    function Face3(a, b, c, normal, color, materialIndex, factory) {
         if (materialIndex === void 0) { materialIndex = 0; }
+        var fact = factory || DefaultFactory_1.DefaultFactory;
         this.a = a;
         this.b = b;
         this.c = c;
@@ -267,12 +268,12 @@ var Face3 = /** @class */ (function () {
         // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new Vector3();
         // TODO: use DefaultFactory here
         // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new (window["THREE"]).Vector3();
-        this.normal = (normal && normal.isVector3) ? normal : DefaultFactory_1.DefaultFactory.newVector3();
+        this.normal = (normal && normal.isVector3) ? normal : fact.newVector3();
         this.vertexNormals = Array.isArray(normal) ? normal : [];
         // this.color = ( color && color.isColor ) ? color : new THREE.Color();
         // this.color = ( color && ( color instanceof Color && color.isColor)  ) ? color : new Color(); // TODO: verify correctness
         // TODO: use DefaultFactory here
-        this.color = (color && color.isColor) ? color : DefaultFactory_1.DefaultFactory.newColor(); // TODO: verify correctness
+        this.color = (color && color.isColor) ? color : fact.newColor(); // TODO: verify correctness
         this.vertexColors = Array.isArray(color) ? color : [];
         this.materialIndex = materialIndex;
     }
@@ -311,6 +312,21 @@ exports.Face3 = Face3;
 
 "use strict";
 
+/**
+ * THE ORIGINAL SOURCE COOE IS HERE:
+ *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
+ *
+ * This is a backport of the old (deprecated) THREE.Face3 class.
+ *
+ * It got deprecated in version r125 and was announced to be completely dropped in future versions.
+ *
+ * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
+ *
+ * And here this is a Typescript port, too. Enjoy!
+ *    - Ikaros Kappler
+ *
+ * @date 2022-02-11
+ */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Gmetry = void 0;
 var DefaultFactory_1 = __webpack_require__(/*! ./DefaultFactory */ "./src/cjs/DefaultFactory.js");

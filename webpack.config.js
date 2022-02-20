@@ -18,18 +18,7 @@ module.exports = env => {
           // extractComment=false to prevent the generation of License.txt
           new TerserPlugin({extractComments: false})
       ],
-      // splitChunks: {
-      //   cacheGroups: {
-      //     vendor: {
-      //       test: /node_modules/,
-      //       chunks: 'initial',
-      //       name: 'vendor',
-      //       enforce: true
-      //     },
-      //   }
-      // } 
     },
-
     resolve: {
       extensions: ['.ts', '.js', '.d.ts'],
     },

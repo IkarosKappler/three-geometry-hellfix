@@ -98,10 +98,29 @@ Use it like this now:
 
 ```
 
+## Logical separation from the `threejs` library
+All direct calls to any THREE classes got separated out in this implementation (Vector2, Vector3, Matrix3, 
+Matrix4, BufferGeometry, BufferAttribute, Float32BufferAtrribute, Box3, Object3). Instead the `Gmetry` 
+class (and helper classes) use a factory. The default factory `DefaultFactory` just forwards all
+calls to the global `window["THREE"]` instance. 
+
+If your `three` object has a different name please
+define your own factory. See `./src/ts/interfaces.ts` (`ThreeFactory`) for details.
+
+
+## Extended `Geometry` and `Face3` classes
+For this approach the the constructors of these classes have a new parameter: `factory?:ThreeFactory`.
+The parameter is optional but you must pass it of you want to use anything else than the default
+`window["THREE"]` instance.
+
+
 ## Get the example running
-Get a copy of threejs and copy it to `./exapple/three/`. Start a local web server (`npm run server`) and
+Get a copy of threejs and copy it to `./example/three/`. Start a local web server (`npm run server`) and
 load `http://127.0.0.1:8080/example/index.html` in your browser.
 
+## Warning messages
+I kept all warning messages as they came, telling that THREE.somthing is printing an error. This is
+because the code is actually not mine and to remind me that it came from the THREE library.
 
 ### Note
 I renamed the `Geometry` class to `Gmetry` because the maintainers of THREE announced that the

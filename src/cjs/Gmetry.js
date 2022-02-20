@@ -1,4 +1,19 @@
 "use strict";
+/**
+ * THE ORIGINAL SOURCE COOE IS HERE:
+ *    https://github.com/mrdoob/three.js/blob/dev/examples/jsm/deprecated/Geometry.js
+ *
+ * This is a backport of the old (deprecated) THREE.Face3 class.
+ *
+ * It got deprecated in version r125 and was announced to be completely dropped in future versions.
+ *
+ * As it was a very useful class I wanted to preserve it for some of my projects which depend on it.
+ *
+ * And here this is a Typescript port, too. Enjoy!
+ *    - Ikaros Kappler
+ *
+ * @date 2022-02-11
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Gmetry = void 0;
 var DefaultFactory_1 = require("./DefaultFactory");

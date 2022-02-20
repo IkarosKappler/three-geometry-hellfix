@@ -14,11 +14,8 @@
  * @date 2022-02-11
  */
 
-//  import * as THREE from "three";
-// import * as TEST from "@types/three/index";
 import { Box3, Color, Sphere, Vector2, Vector3 } from "three";
 import { DefaultFactory } from "./DefaultFactory";
-// import { Box3, Color, Sphere, Vector2, Vector3 } from "@types/three/src/";
 import { Group, ThreeFactory } from "./interfaces";
 
 
@@ -30,11 +27,11 @@ export class DirectGeometry {
     uvs:Array<Vector2>;
     uvs2:Array<Vector2>;
     groups:Array<Group>;
-    morphTargets: { position: Vector3; normal : Vector3}; // Array<MorphTarget>; // TODO: Record?
-    skinWeights: Array<any>; // TODO
-    skinIndices: Array<any>; // TODO
-    boundingBox: Box3; // correct?
-    boundingSphere: Sphere; // correct?
+    morphTargets: { position: Vector3; normal : Vector3};
+    skinWeights: Array<any>; 
+    skinIndices: Array<any>; 
+    boundingBox: Box3; 
+    boundingSphere: Sphere;
     verticesNeedUpdate: boolean;
     normalsNeedUpdate: boolean;
     colorsNeedUpdate : boolean;
@@ -43,8 +40,6 @@ export class DirectGeometry {
 
 	private factory:ThreeFactory;
 
-
-// class DirectGeometry {
 
 	constructor(factory:ThreeFactory) {
 
@@ -67,7 +62,6 @@ export class DirectGeometry {
 		this.boundingSphere = null;
 
 		// update flags
-
 		this.verticesNeedUpdate = false;
 		this.normalsNeedUpdate = false;
 		this.colorsNeedUpdate = false;

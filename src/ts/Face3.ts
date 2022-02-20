@@ -14,11 +14,9 @@
  * @date 2022-02-11
  */
 
-// TODO: only import required types
-// import * as THREE from "three";
 import { Color, Vector3 } from "three";
-
 import { DefaultFactory } from "./DefaultFactory";
+import { ThreeFactory } from "./interfaces";
 
 export class Face3 {
 
@@ -36,7 +34,9 @@ export class Face3 {
     __originalVertexNormals: Array<Vector3>;
     _id: any;
 
-	constructor( a:number, b:number, c:number, normal?:Vector3|Array<Vector3>, color?:Array<Color> | string | number | Color , materialIndex:number = 0 ) {
+	constructor( a:number, b:number, c:number, normal?:Vector3|Array<Vector3>, color?:Array<Color> | string | number | Color , materialIndex:number = 0, factory?:ThreeFactory ) {
+
+		var fact = factory || DefaultFactory;
 
 		this.a = a;
 		this.b = b;
@@ -48,13 +48,13 @@ export class Face3 {
         // this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new Vector3();
 		// TODO: use DefaultFactory here
 		// this.normal = ( normal && (normal instanceof Vector3 && normal.isVector3) ) ? normal : new (window["THREE"]).Vector3();
-		this.normal = ( normal && (normal as any).isVector3 ) ? normal as Vector3 : DefaultFactory.newVector3();
+		this.normal = ( normal && (normal as any).isVector3 ) ? normal as Vector3 : fact.newVector3();
 		this.vertexNormals = Array.isArray( normal ) ? normal : [];
 
 		// this.color = ( color && color.isColor ) ? color : new THREE.Color();
         // this.color = ( color && ( color instanceof Color && color.isColor)  ) ? color : new Color(); // TODO: verify correctness
 		// TODO: use DefaultFactory here
-		this.color = ( color && ( color as any ).isColor ) ? color as Color: DefaultFactory.newColor(); // TODO: verify correctness
+		this.color = ( color && ( color as any ).isColor ) ? color as Color: fact.newColor(); // TODO: verify correctness
 		this.vertexColors = Array.isArray( color ) ? color : [];
 
 		this.materialIndex = materialIndex;
