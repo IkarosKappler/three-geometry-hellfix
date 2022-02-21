@@ -1,3 +1,10 @@
+/**
+ * The default factory to connect to your three library.
+ *
+ * @author  Ikaros Kappler
+ * @date    2022-02-20
+ * @version 1.0.0
+ */
 export declare const DefaultFactory: {
     newVector2: (x?: number, y?: number) => import("three").Vector2;
     newVector3: (x?: number, y?: number, z?: number) => import("three").Vector3;

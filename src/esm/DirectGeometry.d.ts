@@ -14,6 +14,7 @@
  * @date 2022-02-11
  */
 import { Box3, Color, Sphere, Vector2, Vector3 } from "three";
+import { Gmetry } from ".";
 import { Group, ThreeFactory } from "./interfaces";
 export declare class DirectGeometry {
     vertices: Array<Vector3>;
@@ -37,6 +38,6 @@ export declare class DirectGeometry {
     groupsNeedUpdate: boolean;
     private factory;
     constructor(factory: ThreeFactory);
-    computeGroups(geometry: any): void;
-    fromGeometry(geometry: any): this;
+    computeGroups(geometry: Gmetry): void;
+    fromGeometry(geometry: Gmetry): this;
 }

@@ -119,8 +119,8 @@ Get a copy of threejs and copy it to `./example/three/`. Start a local web serve
 load `http://127.0.0.1:8080/example/index.html` in your browser.
 
 ## Warning messages
-I kept all warning messages as they came, telling that THREE.somthing is printing an error. This is
-because the code is actually not mine and to remind me that it came from the THREE library.
+I kept all warning messages as they came, telling that THREE.somthing is printing an error or
+warning. This is because the code is actually not mine and to remind me that it came from the THREE library.
 
 ### Note
 I renamed the `Geometry` class to `Gmetry` because the maintainers of THREE announced that the

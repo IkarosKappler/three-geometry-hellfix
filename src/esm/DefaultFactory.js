@@ -1,4 +1,10 @@
-// import { Matrix4, Object3D, Vector2, Vector3 } from "three";
+/**
+ * The default factory to connect to your three library.
+ *
+ * @author  Ikaros Kappler
+ * @date    2022-02-20
+ * @version 1.0.0
+ */
 export const DefaultFactory = {
     newVector2: (x, y) => { return new window["THREE"].Vector2(x, y); },
     newVector3: (x, y, z) => { return new window["THREE"].Vector3(x, y, z); },

@@ -15,7 +15,6 @@
  */
 import { DefaultFactory } from "./DefaultFactory";
 export class DirectGeometry {
-    // class DirectGeometry {
     constructor(factory) {
         this.vertices = [];
         this.normals = [];
@@ -40,7 +39,8 @@ export class DirectGeometry {
     }
     computeGroups(geometry) {
         const groups = [];
-        let group, i;
+        let group;
+        let i;
         let materialIndex = undefined;
         const faces = geometry.faces;
         for (i = 0; i < faces.length; i++) {
@@ -49,7 +49,7 @@ export class DirectGeometry {
             if (face.materialIndex !== materialIndex) {
                 materialIndex = face.materialIndex;
                 if (group !== undefined) {
-                    group.count = (i * 3) - group.start;
+                    group.count = i * 3 - group.start;
                     groups.push(group);
                 }
                 group = {
@@ -59,7 +59,7 @@ export class DirectGeometry {
             }
         }
         if (group !== undefined) {
-            group.count = (i * 3) - group.start;
+            group.count = i * 3 - group.start;
             groups.push(group);
         }
         this.groups = groups;
@@ -82,6 +82,7 @@ export class DirectGeometry {
                     data: []
                 };
             }
+            // TODO: here seems to be something wrong with the types
             this.morphTargets.position = morphTargetsPosition;
         }
         const morphNormals = geometry.morphNormals;
@@ -104,7 +105,7 @@ export class DirectGeometry {
         const hasSkinWeights = skinWeights.length === vertices.length;
         //
         if (vertices.length > 0 && faces.length === 0) {
-            console.error('THREE.DirectGeometry: Faceless geometries are not supported.');
+            console.error("THREE.DirectGeometry: Faceless geometries are not supported.");
         }
         for (let i = 0; i < faces.length; i++) {
             const face = faces[i];
@@ -131,7 +132,7 @@ export class DirectGeometry {
                     this.uvs.push(vertexUvs[0], vertexUvs[1], vertexUvs[2]);
                 }
                 else {
-                    console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i);
+                    console.warn("THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ", i);
                     // TODO: verify
                     // this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
                     this.uvs.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
@@ -143,9 +144,9 @@ export class DirectGeometry {
                     this.uvs2.push(vertexUvs[0], vertexUvs[1], vertexUvs[2]);
                 }
                 else {
-                    console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i);
+                    console.warn("THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ", i);
                     // TODO: verify
-                    // this.uvs2.push( new Vector2(), new Vector2(), new Vector2() ); 
+                    // this.uvs2.push( new Vector2(), new Vector2(), new Vector2() );
                     this.uvs2.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }

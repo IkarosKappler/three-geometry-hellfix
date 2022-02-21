@@ -18,7 +18,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DirectGeometry = void 0;
 var DefaultFactory_1 = require("./DefaultFactory");
 var DirectGeometry = /** @class */ (function () {
-    // class DirectGeometry {
     function DirectGeometry(factory) {
         this.vertices = [];
         this.normals = [];
@@ -43,7 +42,8 @@ var DirectGeometry = /** @class */ (function () {
     }
     DirectGeometry.prototype.computeGroups = function (geometry) {
         var groups = [];
-        var group, i;
+        var group;
+        var i;
         var materialIndex = undefined;
         var faces = geometry.faces;
         for (i = 0; i < faces.length; i++) {
@@ -52,7 +52,7 @@ var DirectGeometry = /** @class */ (function () {
             if (face.materialIndex !== materialIndex) {
                 materialIndex = face.materialIndex;
                 if (group !== undefined) {
-                    group.count = (i * 3) - group.start;
+                    group.count = i * 3 - group.start;
                     groups.push(group);
                 }
                 group = {
@@ -62,7 +62,7 @@ var DirectGeometry = /** @class */ (function () {
             }
         }
         if (group !== undefined) {
-            group.count = (i * 3) - group.start;
+            group.count = i * 3 - group.start;
             groups.push(group);
         }
         this.groups = groups;
@@ -85,6 +85,7 @@ var DirectGeometry = /** @class */ (function () {
                     data: []
                 };
             }
+            // TODO: here seems to be something wrong with the types
             this.morphTargets.position = morphTargetsPosition;
         }
         var morphNormals = geometry.morphNormals;
@@ -107,7 +108,7 @@ var DirectGeometry = /** @class */ (function () {
         var hasSkinWeights = skinWeights.length === vertices.length;
         //
         if (vertices.length > 0 && faces.length === 0) {
-            console.error('THREE.DirectGeometry: Faceless geometries are not supported.');
+            console.error("THREE.DirectGeometry: Faceless geometries are not supported.");
         }
         for (var i = 0; i < faces.length; i++) {
             var face = faces[i];
@@ -134,7 +135,7 @@ var DirectGeometry = /** @class */ (function () {
                     this.uvs.push(vertexUvs[0], vertexUvs[1], vertexUvs[2]);
                 }
                 else {
-                    console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i);
+                    console.warn("THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ", i);
                     // TODO: verify
                     // this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
                     this.uvs.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
@@ -146,9 +147,9 @@ var DirectGeometry = /** @class */ (function () {
                     this.uvs2.push(vertexUvs[0], vertexUvs[1], vertexUvs[2]);
                 }
                 else {
-                    console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i);
+                    console.warn("THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ", i);
                     // TODO: verify
-                    // this.uvs2.push( new Vector2(), new Vector2(), new Vector2() ); 
+                    // this.uvs2.push( new Vector2(), new Vector2(), new Vector2() );
                     this.uvs2.push(this.factory.newVector2(), this.factory.newVector2(), this.factory.newVector2());
                 }
             }

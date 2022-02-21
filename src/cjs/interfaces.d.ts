@@ -6,7 +6,7 @@ export interface VertexNormals {
 }
 export interface Group {
     start: number;
-    materialIndex: number;
+    materialIndex?: number;
     count: number;
 }
 export interface MorphTarget {

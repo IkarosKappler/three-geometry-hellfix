@@ -29,5 +29,5 @@ export declare class Face3 {
     _id: any;
     constructor(a: number, b: number, c: number, normal?: Vector3 | Array<Vector3>, color?: Array<Color> | string | number | Color, materialIndex?: number, factory?: ThreeFactory);
     clone(): Face3;
-    copy(source: any): this;
+    copy(source: Face3): Face3;
 }

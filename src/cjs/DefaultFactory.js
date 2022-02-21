@@ -1,5 +1,11 @@
 "use strict";
-// import { Matrix4, Object3D, Vector2, Vector3 } from "three";
+/**
+ * The default factory to connect to your three library.
+ *
+ * @author  Ikaros Kappler
+ * @date    2022-02-20
+ * @version 1.0.0
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultFactory = void 0;
 exports.DefaultFactory = {
