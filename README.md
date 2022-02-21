@@ -117,5 +117,10 @@ I renamed the `Geometry` class to `Gmetry` because the maintainers of THREE anno
 Geometry class).
 And I wanted to avoid naming collisions.
 
+#### Demo screenshot
+
+Here I used the new backport with `threejs-slice-geometry`:
+![Screenshot-20220216.png](Screenshot of usage with threejs-slice-geometry)
+
 Have fun, folks.
 Help your friends and do good!
