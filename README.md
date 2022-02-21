@@ -125,8 +125,8 @@ Here I used the new backport with `threejs-slice-geometry`:
 
 #### Credits
 
-https://github.com/mrdoob/three.js/
-https://github.com/tdhooper/threejs-slice-geometry
+- https://github.com/mrdoob/three.js/
+- https://github.com/tdhooper/threejs-slice-geometry
 
 Have fun, folks.
 Help your friends and do good!
