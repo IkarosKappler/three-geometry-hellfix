@@ -121,7 +121,7 @@ And I wanted to avoid naming collisions.
 
 Here I used the new backport with `threejs-slice-geometry`:
 
-![Screenshot-20220216.png](Screenshot of usage with threejs-slice-geometry)
+![Screenshot of usage with threejs-slice-geometry](Screenshot-20220216.png)
 
 Have fun, folks.
 Help your friends and do good!
