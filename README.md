@@ -120,6 +120,7 @@ And I wanted to avoid naming collisions.
 #### Demo screenshot
 
 Here I used the new backport with `threejs-slice-geometry`:
+
 ![Screenshot-20220216.png](Screenshot of usage with threejs-slice-geometry)
 
 Have fun, folks.
