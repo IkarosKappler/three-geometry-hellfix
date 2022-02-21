@@ -1,6 +1,6 @@
 {
   "name": "three-geometry-hellfix",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A backport for the THREE.Geometry that went missing since r125. Name: Gmetry.",
   "main": "src/cjs/index.js",
   "module": "src/esm/index.js",
